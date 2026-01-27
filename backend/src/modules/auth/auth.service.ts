@@ -51,11 +51,11 @@ export class AuthService {
         role: dto.role || UserRole.PLAYER,
         status: UserStatus.PENDING,
         talukId: dto.talukId,
-        profile: dto.dateOfBirth
+        profile: dto.dateOfBirth && dto.gender
           ? {
               create: {
                 dateOfBirth: new Date(dto.dateOfBirth),
-                ...(dto.gender && { gender: dto.gender }),
+                gender: dto.gender,
                 ...(dto.guardianName && { guardianName: dto.guardianName }),
                 ...(dto.guardianPhone && { guardianPhone: dto.guardianPhone }),
               },
