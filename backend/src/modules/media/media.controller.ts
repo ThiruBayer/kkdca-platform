@@ -15,6 +15,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagg
 import { MediaService } from './media.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { MediaPurpose } from '@prisma/client';
+import { Multer } from 'multer';
 
 @ApiTags('media')
 @Controller('media')
@@ -28,7 +29,7 @@ export class MediaController {
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Upload a file' })
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: Multer.File,
     @Body('entityType') entityType: string,
     @Body('entityId') entityId: string,
     @Body('purpose') purpose: MediaPurpose,

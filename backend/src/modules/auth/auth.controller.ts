@@ -7,6 +7,11 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Request as ExpressRequest } from 'express';
+
+interface AuthenticatedRequest extends ExpressRequest {
+  user: { id: string; email: string; role: string };
+}
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -52,7 +57,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'User logout' })
   @ApiResponse({ status: 200, description: 'Logged out successfully' })
-  async logout(@Request() req, @Body() dto: RefreshTokenDto) {
+  async logout(@Request() req: AuthenticatedRequest, @Body() dto: RefreshTokenDto) {
     return this.authService.logout(req.user.id, dto.refreshToken);
   }
 
@@ -63,7 +68,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Change user password' })
   @ApiResponse({ status: 200, description: 'Password changed successfully' })
   @ApiResponse({ status: 400, description: 'Current password is incorrect' })
-  async changePassword(@Request() req, @Body() dto: ChangePasswordDto) {
+  async changePassword(@Request() req: AuthenticatedRequest, @Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(
       req.user.id,
       dto.currentPassword,

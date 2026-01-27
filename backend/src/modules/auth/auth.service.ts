@@ -55,9 +55,9 @@ export class AuthService {
           ? {
               create: {
                 dateOfBirth: new Date(dto.dateOfBirth),
-                gender: dto.gender,
-                guardianName: dto.guardianName,
-                guardianPhone: dto.guardianPhone,
+                ...(dto.gender && { gender: dto.gender }),
+                ...(dto.guardianName && { guardianName: dto.guardianName }),
+                ...(dto.guardianPhone && { guardianPhone: dto.guardianPhone }),
               },
             }
           : undefined,

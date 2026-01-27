@@ -5,6 +5,7 @@ import { MediaPurpose } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { Multer } from 'multer';
 
 @Injectable()
 export class MediaService {
@@ -25,7 +26,7 @@ export class MediaService {
   }
 
   async uploadFile(
-    file: Express.Multer.File,
+    file: Multer.File,
     entityType: string,
     entityId: string,
     purpose: MediaPurpose,
