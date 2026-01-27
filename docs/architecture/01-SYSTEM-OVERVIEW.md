@@ -311,7 +311,7 @@ Example: 001KKI2026
 ```env
 # Application
 NODE_ENV=production
-PORT=3000
+PORT=3101
 API_URL=https://api.kallaichess.com
 PUBLIC_URL=https://kallaichess.com
 ADMIN_URL=https://register.kallaichess.com
@@ -415,13 +415,14 @@ module.exports = {
       instances: 4,
       exec_mode: 'cluster',
       env_production: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        PORT: 3101
       }
     },
     {
       name: 'kdca-public',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start',
+      args: 'start -p 3200',
       cwd: '/var/www/kdca/public-website',
       instances: 2,
       exec_mode: 'cluster'
@@ -429,7 +430,7 @@ module.exports = {
     {
       name: 'kdca-admin',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start -p 3001',
+      args: 'start -p 3201',
       cwd: '/var/www/kdca/admin-portal',
       instances: 2,
       exec_mode: 'cluster'
