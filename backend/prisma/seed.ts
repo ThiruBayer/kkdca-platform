@@ -1,5 +1,4 @@
 import { PrismaClient, UserRole, UserStatus, OfficeBearerRole } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -47,7 +46,7 @@ async function main() {
   console.log('✅ Settings seeded');
 
   // Seed Super Admin
-  const adminPassword = await bcrypt.hash('Admin@123', 12);
+  const adminPassword = 'Admin@123';
   const kallakurichiTaluk = await prisma.taluk.findUnique({ where: { code: 'KKI' } });
 
   const superAdmin = await prisma.user.upsert({
