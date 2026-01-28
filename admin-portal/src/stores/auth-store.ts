@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await api.post('/auth/login', { identifier, password });
-          const { user, tokens } = response.data.data;
+          const { user, tokens } = response.data;
 
           // Set token for future requests
           api.defaults.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
@@ -89,7 +89,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await api.post('/auth/refresh', { refreshToken });
-          const tokens = response.data.data;
+          const tokens = response.data;
 
           api.defaults.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
 

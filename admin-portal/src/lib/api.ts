@@ -29,7 +29,7 @@ api.interceptors.response.use(
               { refreshToken: state.refreshToken }
             );
 
-            const tokens = response.data.data;
+            const tokens = response.data;
 
             // Update stored tokens
             const newState = {
