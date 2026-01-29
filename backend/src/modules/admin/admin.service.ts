@@ -184,6 +184,26 @@ export class AdminService {
     };
   }
 
+  async getSettings() {
+    const settings = await this.prisma.setting.findMany({
+      orderBy: { key: 'asc' },
+    });
+    return { data: settings };
+  }
+
+  async updateSetting(key: string, value: any) {
+    return this.prisma.setting.upsert({
+      where: { key },
+      update: { value },
+      create: {
+        key,
+        value,
+        valueType: typeof value === 'boolean' ? 'boolean' : 'string',
+        isPublic: false,
+      },
+    });
+  }
+
   async getAuditLogs(params: {
     userId?: string;
     action?: string;
