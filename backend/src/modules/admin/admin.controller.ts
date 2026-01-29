@@ -96,6 +96,21 @@ export class AdminController {
     return this.adminService.approveTournament(tournamentId, adminId);
   }
 
+  @Get('settings')
+  @ApiOperation({ summary: 'Get all settings' })
+  async getSettings() {
+    return this.adminService.getSettings();
+  }
+
+  @Patch('settings/:key')
+  @ApiOperation({ summary: 'Update a setting' })
+  async updateSetting(
+    @Param('key') key: string,
+    @Body('value') value: any,
+  ) {
+    return this.adminService.updateSetting(key, value);
+  }
+
   @Get('reports/payments')
   @ApiOperation({ summary: 'Get payment reports' })
   @ApiQuery({ name: 'from', required: true })
