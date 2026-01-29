@@ -35,13 +35,13 @@ export default function MyProfilePage() {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
         phone: profile.phone || '',
-        dateOfBirth: profile.dateOfBirth ? profile.dateOfBirth.split('T')[0] : '',
-        gender: profile.gender || '',
-        guardianName: profile.playerProfile?.guardianName || '',
-        guardianPhone: profile.playerProfile?.guardianPhone || '',
-        fideId: profile.playerProfile?.fideId || '',
-        aicfId: profile.playerProfile?.aicfId || '',
-        tncaId: profile.playerProfile?.tncaId || '',
+        dateOfBirth: profile.profile?.dateOfBirth ? profile.profile.dateOfBirth.split('T')[0] : '',
+        gender: profile.profile?.gender || '',
+        guardianName: profile.profile?.guardianName || '',
+        guardianPhone: profile.profile?.guardianPhone || '',
+        fideId: profile.profile?.fideId || '',
+        aicfId: profile.profile?.aicfId || '',
+        tncaId: profile.profile?.tncaId || '',
       });
     }
   }, [profile]);

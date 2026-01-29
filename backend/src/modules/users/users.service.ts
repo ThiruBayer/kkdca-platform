@@ -67,6 +67,30 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
+    // Build profile data for upsert
+    const profileData = {
+      addressLine1: dto.addressLine1,
+      addressLine2: dto.addressLine2,
+      city: dto.city,
+      district: dto.district,
+      pincode: dto.pincode,
+      bio: dto.bio,
+      fideId: dto.fideId,
+      aicfId: dto.aicfId,
+      tncaId: dto.tncaId,
+      schoolName: dto.schoolName,
+      collegeName: dto.collegeName,
+      guardianName: dto.guardianName,
+      guardianPhone: dto.guardianPhone,
+      ...(dto.dateOfBirth ? { dateOfBirth: new Date(dto.dateOfBirth) } : {}),
+      ...(dto.gender ? { gender: dto.gender } : {}),
+    };
+
+    // Remove undefined values
+    Object.keys(profileData).forEach((key) => {
+      if (profileData[key] === undefined) delete profileData[key];
+    });
+
     // Update user basic info
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
@@ -74,22 +98,18 @@ export class UsersService {
         firstName: dto.firstName,
         lastName: dto.lastName,
         displayName: dto.displayName,
+        ...(dto.phone ? { phone: dto.phone } : {}),
         profile: user.profile
-          ? {
-              update: {
-                addressLine1: dto.addressLine1,
-                addressLine2: dto.addressLine2,
-                city: dto.city,
-                district: dto.district,
-                pincode: dto.pincode,
-                bio: dto.bio,
-                fideId: dto.fideId,
-                aicfId: dto.aicfId,
-                schoolName: dto.schoolName,
-                collegeName: dto.collegeName,
-              },
-            }
-          : undefined,
+          ? { update: profileData }
+          : Object.keys(profileData).length > 0
+            ? {
+                create: {
+                  dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : new Date(),
+                  gender: (dto.gender as any) || 'MALE',
+                  ...profileData,
+                },
+              }
+            : undefined,
       },
       include: {
         profile: true,
