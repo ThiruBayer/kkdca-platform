@@ -470,7 +470,7 @@ function DocumentUpload({
   label: string;
   url: string | null;
   uploading: boolean;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: any;
   accept: string;
   onUpload: (file: File) => void;
   isImage?: boolean;
