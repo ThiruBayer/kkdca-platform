@@ -192,14 +192,20 @@ export class AdminService {
   }
 
   async updateSetting(key: string, value: any) {
+    const publicKeys = [
+      'site_name', 'site_tagline', 'contact_email', 'contact_phone', 'address',
+      'membership_fee_player', 'membership_fee_arbiter',
+      'allow_player_registration', 'allow_academy_registration', 'registration_login_enabled',
+    ];
+    const isPublic = publicKeys.includes(key);
     return this.prisma.setting.upsert({
       where: { key },
-      update: { value },
+      update: { value, isPublic },
       create: {
         key,
         value,
         valueType: typeof value === 'boolean' ? 'boolean' : 'string',
-        isPublic: false,
+        isPublic,
       },
     });
   }

@@ -49,11 +49,12 @@ export default function RegisterPage() {
     }).catch(() => {});
     // Check if login/password is enabled
     api.get('/public/settings').then((res) => {
-      const settings = res.data?.data || res.data || [];
-      const regLogin = Array.isArray(settings)
-        ? settings.find((s: any) => s.key === 'registration_login_enabled')
-        : null;
-      setLoginEnabled(regLogin?.value === true || regLogin?.value === 'true');
+      const settings = res.data?.data || res.data || {};
+      // Public endpoint returns { key: value } object
+      const val = Array.isArray(settings)
+        ? settings.find((s: any) => s.key === 'registration_login_enabled')?.value
+        : settings.registration_login_enabled;
+      setLoginEnabled(val === true || val === 'true');
     }).catch(() => {});
   }, []);
 
