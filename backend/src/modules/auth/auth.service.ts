@@ -50,13 +50,21 @@ export class AuthService {
         role: dto.role || UserRole.PLAYER,
         status: UserStatus.PENDING,
         talukId: dto.talukId,
-        profile: dto.dateOfBirth && dto.gender
+        profile: dto.dateOfBirth || dto.gender
           ? {
               create: {
-                dateOfBirth: new Date(dto.dateOfBirth),
-                gender: dto.gender,
+                dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : new Date('2000-01-01'),
+                gender: dto.gender || 'MALE',
                 ...(dto.guardianName && { guardianName: dto.guardianName }),
                 ...(dto.guardianPhone && { guardianPhone: dto.guardianPhone }),
+                ...(dto.guardianRelation && { guardianRelation: dto.guardianRelation }),
+                ...(dto.addressLine1 && { addressLine1: dto.addressLine1 }),
+                ...(dto.state && { state: dto.state }),
+                ...(dto.district && { district: dto.district }),
+                ...(dto.pincode && { pincode: dto.pincode }),
+                ...(dto.fideId && { fideId: dto.fideId }),
+                ...(dto.aicfId && { aicfId: dto.aicfId }),
+                ...(dto.tncaId && { tncaId: dto.tncaId }),
               },
             }
           : undefined,
