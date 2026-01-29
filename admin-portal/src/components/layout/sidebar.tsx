@@ -17,14 +17,17 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+const ADMIN_ROLES = ['SUPER_ADMIN', 'ADMIN'];
+
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Players', href: '/players', icon: Users },
-  { name: 'Tournaments', href: '/tournaments', icon: Trophy },
-  { name: 'Organizations', href: '/organizations', icon: Building2 },
-  { name: 'Content', href: '/content', icon: FileText },
-  { name: 'Payments', href: '/payments', icon: CreditCard },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: null },
+  { name: 'My Profile', href: '/my-profile', icon: Users, roles: ['PLAYER', 'ARBITER'] },
+  { name: 'Players', href: '/players', icon: Users, roles: ADMIN_ROLES },
+  { name: 'Tournaments', href: '/tournaments', icon: Trophy, roles: null },
+  { name: 'Organizations', href: '/organizations', icon: Building2, roles: [...ADMIN_ROLES, 'ACADEMY', 'TALUK_ASSOCIATION'] },
+  { name: 'Content', href: '/content', icon: FileText, roles: ADMIN_ROLES },
+  { name: 'Payments', href: '/payments', icon: CreditCard, roles: ADMIN_ROLES },
+  { name: 'Settings', href: '/settings', icon: Settings, roles: ADMIN_ROLES },
 ];
 
 export function Sidebar() {
@@ -74,7 +77,7 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          {navigation.map((item) => {
+          {navigation.filter((item) => item.roles === null || (user?.role && item.roles.includes(user.role))).map((item) => {
             const isActive = pathname.startsWith(item.href);
             return (
               <Link
