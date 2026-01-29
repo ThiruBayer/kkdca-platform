@@ -67,29 +67,37 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    // Build profile data for upsert
-    const profileData = {
-      addressLine1: dto.addressLine1,
-      addressLine2: dto.addressLine2,
-      city: dto.city,
-      district: dto.district,
-      pincode: dto.pincode,
-      bio: dto.bio,
-      fideId: dto.fideId,
-      aicfId: dto.aicfId,
-      tncaId: dto.tncaId,
-      schoolName: dto.schoolName,
-      collegeName: dto.collegeName,
-      guardianName: dto.guardianName,
-      guardianPhone: dto.guardianPhone,
-      ...(dto.dateOfBirth ? { dateOfBirth: new Date(dto.dateOfBirth) } : {}),
-      ...(dto.gender ? { gender: dto.gender } : {}),
-    };
+    // Build profile update data
+    const profileUpdate: Record<string, any> = {};
+    if (dto.addressLine1 !== undefined) profileUpdate.addressLine1 = dto.addressLine1;
+    if (dto.addressLine2 !== undefined) profileUpdate.addressLine2 = dto.addressLine2;
+    if (dto.city !== undefined) profileUpdate.city = dto.city;
+    if (dto.district !== undefined) profileUpdate.district = dto.district;
+    if (dto.pincode !== undefined) profileUpdate.pincode = dto.pincode;
+    if (dto.bio !== undefined) profileUpdate.bio = dto.bio;
+    if (dto.fideId !== undefined) profileUpdate.fideId = dto.fideId;
+    if (dto.aicfId !== undefined) profileUpdate.aicfId = dto.aicfId;
+    if (dto.tncaId !== undefined) profileUpdate.tncaId = dto.tncaId;
+    if (dto.schoolName !== undefined) profileUpdate.schoolName = dto.schoolName;
+    if (dto.collegeName !== undefined) profileUpdate.collegeName = dto.collegeName;
+    if (dto.guardianName !== undefined) profileUpdate.guardianName = dto.guardianName;
+    if (dto.guardianPhone !== undefined) profileUpdate.guardianPhone = dto.guardianPhone;
+    if (dto.dateOfBirth) profileUpdate.dateOfBirth = new Date(dto.dateOfBirth);
+    if (dto.gender) profileUpdate.gender = dto.gender;
 
-    // Remove undefined values
-    Object.keys(profileData).forEach((key) => {
-      if (profileData[key] === undefined) delete profileData[key];
-    });
+    // Determine profile operation
+    let profileOp: any = undefined;
+    if (user.profile && Object.keys(profileUpdate).length > 0) {
+      profileOp = { update: profileUpdate };
+    } else if (!user.profile && Object.keys(profileUpdate).length > 0) {
+      profileOp = {
+        create: {
+          dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : new Date(),
+          gender: (dto.gender as any) || 'MALE',
+          ...profileUpdate,
+        },
+      };
+    }
 
     // Update user basic info
     const updatedUser = await this.prisma.user.update({
@@ -99,17 +107,7 @@ export class UsersService {
         lastName: dto.lastName,
         displayName: dto.displayName,
         ...(dto.phone ? { phone: dto.phone } : {}),
-        profile: user.profile
-          ? { update: profileData }
-          : Object.keys(profileData).length > 0
-            ? {
-                create: {
-                  dateOfBirth: dto.dateOfBirth ? new Date(dto.dateOfBirth) : new Date(),
-                  gender: (dto.gender as any) || 'MALE',
-                  ...profileData,
-                },
-              }
-            : undefined,
+        profile: profileOp,
       },
       include: {
         profile: true,
