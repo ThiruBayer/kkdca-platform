@@ -119,12 +119,12 @@ function PlayerDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg border p-6 text-center">
           <Trophy className="w-8 h-8 text-primary-600 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-gray-900">{profile?.playerProfile?.tournamentsPlayed || 0}</p>
+          <p className="text-2xl font-bold text-gray-900">{profile?.profile?.tournamentsPlayed || 0}</p>
           <p className="text-sm text-gray-500">Tournaments Played</p>
         </div>
         <div className="bg-white rounded-lg border p-6 text-center">
           <Award className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-gray-900">{profile?.playerProfile?.fideRating || '-'}</p>
+          <p className="text-2xl font-bold text-gray-900">{profile?.profile?.fideRating || '-'}</p>
           <p className="text-sm text-gray-500">FIDE Rating</p>
         </div>
         <div className="bg-white rounded-lg border p-6 text-center">
