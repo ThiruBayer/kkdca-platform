@@ -54,7 +54,9 @@ export function Sidebar() {
               <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold">K</span>
               </div>
-              <span className="font-semibold text-gray-900">KDCA Admin</span>
+              <span className="font-semibold text-gray-900">
+                {user?.role && ADMIN_ROLES.includes(user.role) ? 'KDCA Admin' : 'KDCA Player'}
+              </span>
             </Link>
           )}
           {collapsed && (
