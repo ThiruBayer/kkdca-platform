@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MaxLength, IsDateString, IsEnum } from 'class-validator';
+import { IsString, IsOptional, MaxLength, IsDateString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateProfileDto {
@@ -39,6 +39,12 @@ export class UpdateProfileDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(5)
+  bloodGroup?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   @MaxLength(255)
   addressLine1?: string;
 
@@ -59,6 +65,12 @@ export class UpdateProfileDto {
   @IsString()
   @MaxLength(100)
   district?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  state?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -92,6 +104,12 @@ export class UpdateProfileDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(100)
+  occupation?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   @MaxLength(255)
   schoolName?: string;
 
@@ -112,4 +130,16 @@ export class UpdateProfileDto {
   @IsString()
   @MaxLength(15)
   guardianPhone?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  guardianEmail?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  guardianRelation?: string;
 }

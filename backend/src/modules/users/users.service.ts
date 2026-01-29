@@ -73,15 +73,20 @@ export class UsersService {
     if (dto.addressLine2 !== undefined) profileUpdate.addressLine2 = dto.addressLine2;
     if (dto.city !== undefined) profileUpdate.city = dto.city;
     if (dto.district !== undefined) profileUpdate.district = dto.district;
+    if (dto.state !== undefined) profileUpdate.state = dto.state;
     if (dto.pincode !== undefined) profileUpdate.pincode = dto.pincode;
     if (dto.bio !== undefined) profileUpdate.bio = dto.bio;
+    if (dto.bloodGroup !== undefined) profileUpdate.bloodGroup = dto.bloodGroup;
     if (dto.fideId !== undefined) profileUpdate.fideId = dto.fideId;
     if (dto.aicfId !== undefined) profileUpdate.aicfId = dto.aicfId;
     if (dto.tncaId !== undefined) profileUpdate.tncaId = dto.tncaId;
+    if (dto.occupation !== undefined) profileUpdate.occupation = dto.occupation;
     if (dto.schoolName !== undefined) profileUpdate.schoolName = dto.schoolName;
     if (dto.collegeName !== undefined) profileUpdate.collegeName = dto.collegeName;
     if (dto.guardianName !== undefined) profileUpdate.guardianName = dto.guardianName;
     if (dto.guardianPhone !== undefined) profileUpdate.guardianPhone = dto.guardianPhone;
+    if (dto.guardianEmail !== undefined) profileUpdate.guardianEmail = dto.guardianEmail;
+    if (dto.guardianRelation !== undefined) profileUpdate.guardianRelation = dto.guardianRelation;
     if (dto.dateOfBirth) profileUpdate.dateOfBirth = new Date(dto.dateOfBirth);
     if (dto.gender) profileUpdate.gender = dto.gender;
 
