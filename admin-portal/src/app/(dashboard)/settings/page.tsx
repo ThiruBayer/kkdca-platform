@@ -16,6 +16,7 @@ export default function SettingsPage() {
     registration_year: '2024-25',
     allow_player_registration: true,
     allow_academy_registration: true,
+    registration_login_enabled: false,
     site_title: 'KDCA - Kallakurichi District Chess Association',
     site_description: 'Official website of Kallakurichi District Chess Association - Promoting chess excellence in Kallakurichi',
     contact_email: 'info@kallaichess.com',
@@ -147,6 +148,13 @@ export default function SettingsPage() {
                       <input type="checkbox" checked={form.allow_academy_registration} onChange={(e) => updateField('allow_academy_registration', e.target.checked)} className="rounded text-primary-600" />
                       <span className="text-sm text-gray-700">Allow academy registrations</span>
                     </label>
+                  </div>
+                  <div className="pt-4 border-t">
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" checked={form.registration_login_enabled} onChange={(e) => updateField('registration_login_enabled', e.target.checked)} className="rounded text-primary-600" />
+                      <span className="text-sm text-gray-700">Enable login credentials during registration</span>
+                    </label>
+                    <p className="text-xs text-gray-500 mt-1 ml-6">When disabled, players register without username/password. Admin can assign credentials later.</p>
                   </div>
                 </div>
               )}
