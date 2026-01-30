@@ -146,28 +146,23 @@ export default function RegisterPage() {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful!</h2>
           <p className="text-gray-600 mb-3">
-            Your player registration has been submitted to KKDCA.
+            Your registration is complete. Please complete the membership payment to get your KKDCA ID.
           </p>
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-left">
             <div className="flex items-start gap-2">
               <Info className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
               <div className="text-sm">
-                <p className="font-semibold text-amber-800">What happens next?</p>
-                <ul className="text-amber-700 mt-1 space-y-1">
-                  <li>Admin will review your registration</li>
-                  <li>Your KKDCA ID will be generated upon approval</li>
-                </ul>
+                <p className="font-semibold text-amber-800">Payment Pending</p>
+                <p className="text-amber-700 mt-1">The payment page could not be loaded. Please contact KKDCA office to complete your membership payment of Rs.75.</p>
               </div>
             </div>
           </div>
-          {loginEnabled && (
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-medium"
-            >
-              Go to Login <ChevronRight className="w-4 h-4" />
-            </Link>
-          )}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-medium"
+          >
+            Go to Home <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     );
