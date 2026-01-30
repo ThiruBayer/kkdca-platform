@@ -395,7 +395,7 @@ export default function RegisterPage() {
                   <div className="text-sm">
                     <p className="font-bold text-amber-800">Membership Fee - Rs.75</p>
                     <p className="font-semibold text-amber-700">KKDCA Annual Membership Fee: Rs.75</p>
-                    <p className="text-amber-600 mt-0.5">Valid from January 2026 to December 31, 2026. After completing the form, you will be redirected to the payment page. Upon successful payment, your registration will be submitted for admin review.</p>
+                    <p className="text-amber-600 mt-0.5">Valid from January 2026 to December 31, 2026. After completing the form, you will be redirected to the payment page. Upon successful payment, your KKDCA membership will be activated automatically.</p>
                   </div>
                 </div>
               </div>

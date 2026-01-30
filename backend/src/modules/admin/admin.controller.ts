@@ -111,6 +111,32 @@ export class AdminController {
     return this.adminService.updateSetting(key, value);
   }
 
+  @Get('payments')
+  @ApiOperation({ summary: 'List all payments with filters' })
+  @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'from', required: false })
+  @ApiQuery({ name: 'to', required: false })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  async getAllPayments(
+    @Query('search') search?: string,
+    @Query('status') status?: string,
+    @Query('from') from?: string,
+    @Query('to') to?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.adminService.getAllPayments({
+      search,
+      status,
+      from,
+      to,
+      page: page || 1,
+      limit: Math.min(limit || 20, 100),
+    });
+  }
+
   @Get('reports/payments')
   @ApiOperation({ summary: 'Get payment reports' })
   @ApiQuery({ name: 'from', required: true })

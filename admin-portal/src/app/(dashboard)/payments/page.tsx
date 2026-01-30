@@ -17,18 +17,19 @@ import {
 interface Payment {
   id: string;
   amount: number;
-  currency: string;
   status: string;
-  method: string;
   purpose: string;
-  transactionId?: string;
+  description?: string;
+  gatewayOrderId?: string;
+  gatewayPaymentId?: string;
+  receiptNo?: string;
   createdAt: string;
+  completedAt?: string;
   user: {
+    firstName: string;
+    lastName: string;
     email: string;
-    profile: {
-      firstName: string;
-      lastName: string;
-    };
+    kdcaId?: string;
   };
 }
 
@@ -64,7 +65,7 @@ export default function PaymentsPage() {
         ...(dateFrom && { from: dateFrom }),
         ...(dateTo && { to: dateTo }),
       });
-      const res = await api.get(`/payments?${params}`);
+      const res = await api.get(`/admin/payments?${params}`);
       return res.data;
     },
   });
@@ -240,15 +241,17 @@ export default function PaymentsPage() {
                       <td className="px-6 py-4">
                         <div>
                           <div className="font-mono text-sm text-gray-900">
-                            {payment.transactionId || payment.id.slice(0, 8)}
+                            {payment.gatewayOrderId || payment.id.slice(0, 8)}
                           </div>
-                          <div className="text-xs text-gray-500">{payment.method}</div>
+                          {payment.receiptNo && (
+                            <div className="text-xs text-gray-500">{payment.receiptNo}</div>
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div>
                           <div className="font-medium text-gray-900">
-                            {payment.user?.profile?.firstName} {payment.user?.profile?.lastName}
+                            {payment.user?.firstName} {payment.user?.lastName}
                           </div>
                           <div className="text-sm text-gray-500">{payment.user?.email}</div>
                         </div>
