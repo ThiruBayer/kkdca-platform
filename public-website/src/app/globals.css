@@ -71,50 +71,55 @@ html {
   animation: borderGlow 4s ease-in-out infinite;
 }
 
-/* Chess Cursor - Desktop only */
+/* Custom Cursor - Desktop only */
 @media (min-width: 1025px) {
   * {
     cursor: none !important;
   }
 }
 
-.chess-cursor-canvas {
+.cursor-dot {
   position: fixed;
+  width: 8px;
+  height: 8px;
+  background-color: #D4AF37;
+  border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   mix-blend-mode: difference;
-  transition: opacity 0.3s ease;
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
 }
 
-/* Chess piece change indicator - shows piece name on scroll */
-.chess-piece-indicator {
+.cursor-dot.cursor-hover {
+  width: 12px;
+  height: 12px;
+  background-color: #FF6B35;
+}
+
+.cursor-outline {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(255, 107, 53, 0.15));
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  color: #D4AF37;
-  padding: 8px 20px;
-  border-radius: 50px;
-  z-index: 9998;
-  opacity: 0;
-  transform: translateY(20px) scale(0.9);
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 40px;
+  height: 40px;
+  border: 2px solid #D4AF37;
+  border-radius: 50%;
   pointer-events: none;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
 }
 
-.chess-piece-indicator-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.cursor-outline.cursor-hover {
+  width: 60px;
+  height: 60px;
+  border-color: #FF6B35;
 }
 
-/* Hide chess cursor on mobile */
+/* Hide custom cursor on mobile */
 @media (max-width: 1024px) {
-  .chess-cursor-canvas,
-  .chess-piece-indicator {
+  .cursor-dot,
+  .cursor-outline {
     display: none !important;
   }
 }

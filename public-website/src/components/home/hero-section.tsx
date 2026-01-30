@@ -3,32 +3,25 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Trophy, Users, Star, ChevronDown, Sparkles, Play } from 'lucide-react';
+import { Trophy, Users, Star, ChevronDown, Sparkles } from 'lucide-react';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Full-screen hero background image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/hero.jfif"
-          alt="Chess Championship - KKDCA"
-          fill
-          className="object-cover"
-          priority
-          quality={90}
-        />
-        {/* Dark gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/95 via-gray-900/80 to-gray-900/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-gray-900/60" />
-      </div>
+    <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      {/* Dark neutral background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
 
-      {/* Teal/gold accent blobs */}
-      <div className="absolute top-10 right-10 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-10 left-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+      {/* Chess pattern overlay */}
+      <div className="absolute inset-0 bg-chess-pattern opacity-20" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full pt-28">
+      {/* Teal/gold/emerald accent blobs */}
+      <div className="absolute top-10 right-10 w-96 h-96 bg-teal-500/25 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-teal-400/20 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/10 rounded-full blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left content */}
           <motion.div
@@ -37,25 +30,25 @@ export function HeroSection() {
             transition={{ duration: 0.8 }}
           >
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/20 to-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-teal-500/30 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/20 to-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-teal-500/30">
               <Sparkles className="w-4 h-4 text-amber-400" />
               Established 2019 &bull; Affiliated with TNSCA &amp; AICF
             </div>
 
             {/* Heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight leading-tight">
               Kallakurichi District
               <span className="block gradient-text mt-2">Chess Association</span>
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-gray-300 max-w-xl mb-10 leading-relaxed">
+            <p className="text-lg text-gray-300 max-w-xl mb-8 leading-relaxed">
               Nurturing the next generation of chess champions across 6 taluks
               in Kallakurichi District, Tamil Nadu. Join us and be part of the chess revolution.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-14">
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Link
                 href="https://register.kallaichess.com/register"
                 className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-900 bg-gradient-to-r from-secondary-400 via-secondary-500 to-secondary-600 rounded-xl hover:from-secondary-300 hover:via-secondary-400 hover:to-secondary-500 transition-all shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02]"
@@ -72,21 +65,21 @@ export function HeroSection() {
 
             {/* Quick stats */}
             <div className="grid grid-cols-3 gap-6">
-              <div className="text-center backdrop-blur-sm bg-white/5 rounded-xl p-3 border border-white/10">
+              <div className="text-center">
                 <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-teal-500/30 to-teal-600/30 rounded-xl mb-2 mx-auto border border-teal-500/20">
                   <Trophy className="w-5 h-5 text-teal-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">50+</div>
                 <div className="text-xs text-gray-400">Tournaments</div>
               </div>
-              <div className="text-center backdrop-blur-sm bg-white/5 rounded-xl p-3 border border-white/10">
+              <div className="text-center">
                 <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-amber-500/30 to-amber-600/30 rounded-xl mb-2 mx-auto border border-amber-500/20">
                   <Users className="w-5 h-5 text-amber-400" />
                 </div>
                 <div className="text-2xl font-bold text-white">500+</div>
                 <div className="text-xs text-gray-400">Players</div>
               </div>
-              <div className="text-center backdrop-blur-sm bg-white/5 rounded-xl p-3 border border-white/10">
+              <div className="text-center">
                 <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-emerald-500/30 to-emerald-600/30 rounded-xl mb-2 mx-auto border border-emerald-500/20">
                   <Star className="w-5 h-5 text-emerald-400" />
                 </div>
@@ -96,7 +89,7 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right - Floating gallery cards over hero image */}
+          {/* Right - Logo + Hero Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -104,72 +97,56 @@ export function HeroSection() {
             className="hidden lg:flex items-center justify-center"
           >
             <div className="relative">
-              {/* Main logo with glassmorphism */}
-              <div className="relative w-72 h-72 rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl shadow-teal-500/20 animate-float backdrop-blur-md bg-white/10">
+              {/* Main logo */}
+              <div className="relative w-80 h-80 rounded-3xl overflow-hidden border-4 border-teal-400/40 shadow-2xl shadow-teal-500/20 animate-float">
                 <Image
                   src="/images/logo/KKDCA_LOGO.jpg"
                   alt="KKDCA Logo"
                   fill
-                  className="object-contain bg-white/90 p-4"
+                  className="object-contain bg-white p-4"
                   priority
                 />
               </div>
 
-              {/* Floating tournament image */}
+              {/* Hero image - bigger, beside the logo */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="absolute -bottom-8 -left-16 w-44 h-32 rounded-xl overflow-hidden border-2 border-amber-400/40 shadow-xl shadow-amber-500/20 backdrop-blur-sm"
+                className="absolute -bottom-10 -right-20 w-56 h-44 rounded-2xl overflow-hidden border-4 border-amber-400/50 shadow-2xl shadow-amber-500/30"
               >
                 <Image
-                  src="/images/gallery/chesstournament.jfif"
-                  alt="Chess Tournament"
+                  src="/images/hero.jfif"
+                  alt="Chess Champions - KKDCA"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute bottom-2 left-2 text-[10px] text-white font-medium">Tournament Action</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </motion.div>
 
               {/* Floating chess activity image */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-                className="absolute -top-6 -right-14 w-40 h-32 rounded-xl overflow-hidden border-2 border-teal-400/40 shadow-xl shadow-teal-500/20 backdrop-blur-sm"
-              >
+              <div className="absolute -top-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-teal-400/40 shadow-xl shadow-teal-500/20">
                 <Image
                   src="/images/gallery/chessboardsponsor_govtschool.jfif"
                   alt="Chess in Schools"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute bottom-2 left-2 text-[10px] text-white font-medium">School Programs</span>
-              </motion.div>
+              </div>
 
-              {/* Trophy collection floating card */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1.0 }}
-                className="absolute -bottom-4 -right-10 w-36 h-28 rounded-xl overflow-hidden border-2 border-emerald-400/40 shadow-xl shadow-emerald-500/20 backdrop-blur-sm"
-              >
+              {/* Floating tournament image */}
+              <div className="absolute -bottom-8 -left-12 w-40 h-28 rounded-xl overflow-hidden border-4 border-amber-400/40 shadow-xl shadow-amber-500/20">
                 <Image
-                  src="/images/gallery/image11.jpg"
-                  alt="Trophies & Awards"
+                  src="/images/gallery/chesstournament.jfif"
+                  alt="Chess Tournament"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute bottom-2 left-2 text-[10px] text-white font-medium">Awards</span>
-              </motion.div>
+              </div>
 
-              {/* Decorative elements */}
+              {/* Decorative colored circles */}
               <div className="absolute -top-4 -left-4 w-8 h-8 bg-teal-400 rounded-full opacity-60 animate-bounce" />
               <div className="absolute -bottom-2 right-4 w-6 h-6 bg-amber-500 rounded-full opacity-50 animate-pulse" />
-              <div className="absolute top-1/2 -right-6 w-4 h-4 bg-emerald-400 rounded-full opacity-40 animate-ping" />
             </div>
           </motion.div>
         </div>
@@ -177,10 +154,7 @@ export function HeroSection() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-xs text-teal-400/60 tracking-widest uppercase">Scroll Down</span>
-          <ChevronDown className="w-8 h-8 text-teal-400/60" />
-        </div>
+        <ChevronDown className="w-8 h-8 text-teal-400/60" />
       </div>
     </section>
   );
