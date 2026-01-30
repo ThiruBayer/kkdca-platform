@@ -28,7 +28,7 @@ interface Tournament {
 
 const cardColors = [
   { badge: 'bg-blue-50 text-blue-700', border: 'border-t-4 border-t-blue-500', btn: 'bg-gradient-to-r from-blue-500 to-indigo-600' },
-  { badge: 'bg-purple-50 text-purple-700', border: 'border-t-4 border-t-purple-500', btn: 'bg-gradient-to-r from-purple-500 to-pink-600' },
+  { badge: 'bg-primary-50 text-primary-700', border: 'border-t-4 border-t-primary-500', btn: 'bg-gradient-to-r from-primary-500 to-primary-700' },
   { badge: 'bg-orange-50 text-orange-700', border: 'border-t-4 border-t-orange-500', btn: 'bg-gradient-to-r from-orange-500 to-red-500' },
 ];
 
@@ -74,7 +74,7 @@ export function TournamentsSection() {
           </div>
           <Link
             href="/tournaments"
-            className="hidden sm:flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+            className="hidden sm:flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
           >
             View all tournaments
             <ArrowRight className="w-4 h-4" />
@@ -88,7 +88,7 @@ export function TournamentsSection() {
             ))}
           </div>
         ) : tournaments.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-purple-200">
+          <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-primary-200">
             <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Trophy className="w-10 h-10 text-white" />
             </div>
@@ -100,7 +100,7 @@ export function TournamentsSection() {
             </p>
             <Link
               href="/tournaments"
-              className="inline-flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700"
+              className="inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700"
             >
               View past tournaments
               <ArrowRight className="w-4 h-4" />
@@ -129,7 +129,7 @@ export function TournamentsSection() {
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
                       {tournament.name}
                     </h3>
 
@@ -176,7 +176,7 @@ export function TournamentsSection() {
 
         <Link
           href="/tournaments"
-          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
         >
           View all tournaments
           <ArrowRight className="w-4 h-4" />

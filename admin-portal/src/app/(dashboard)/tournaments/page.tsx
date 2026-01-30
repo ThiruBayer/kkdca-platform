@@ -75,6 +75,15 @@ export default function TournamentsPage() {
     },
   });
 
+  const rejectMutation = useMutation({
+    mutationFn: async ({ tournamentId, reason }: { tournamentId: string; reason: string }) => {
+      return api.post(`/admin/tournaments/${tournamentId}/reject`, { reason });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-tournaments'] });
+    },
+  });
+
   const tournaments: Tournament[] = data?.data || [];
   const pagination = data?.pagination || { total: 0, pages: 1 };
 
@@ -196,7 +205,16 @@ export default function TournamentsPage() {
                         >
                           <CheckCircle className="w-4 h-4 text-green-600" />
                         </button>
-                        <button className="p-2 bg-red-50 hover:bg-red-100 rounded-lg" title="Reject">
+                        <button
+                          className="p-2 bg-red-50 hover:bg-red-100 rounded-lg"
+                          title="Reject"
+                          onClick={() => {
+                            const reason = prompt('Enter rejection reason:');
+                            if (reason) {
+                              rejectMutation.mutate({ tournamentId: tournament.id, reason });
+                            }
+                          }}
+                        >
                           <XCircle className="w-4 h-4 text-red-600" />
                         </button>
                       </>

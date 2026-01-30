@@ -41,15 +41,15 @@ const features = [
     icon: BookOpen,
     title: 'Education',
     description: 'Partnering with schools to introduce chess as part of curriculum and develop cognitive skills in young minds.',
-    gradient: 'from-pink-500 to-purple-600',
-    bg: 'bg-gradient-to-br from-pink-50 to-purple-50',
-    border: 'border-pink-200',
+    gradient: 'from-primary-500 to-primary-700',
+    bg: 'bg-gradient-to-br from-primary-50 to-primary-100',
+    border: 'border-primary-200',
   },
 ];
 
 export function AboutSection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-white via-purple-50/30 to-white">
+    <section className="py-20 bg-gradient-to-br from-white via-primary-50/30 to-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
@@ -58,12 +58,12 @@ export function AboutSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-flex items-center gap-2 text-purple-600 font-semibold mb-4 bg-purple-50 px-4 py-1.5 rounded-full text-sm border border-purple-200">
+              <span className="inline-flex items-center gap-2 text-primary-600 font-semibold mb-4 bg-primary-50 px-4 py-1.5 rounded-full text-sm border border-primary-200">
                 About KKDCA
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 Nurturing Chess Excellence in{' '}
-                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Kallakurichi</span>
+                <span className="bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">Kallakurichi</span>
               </h2>
               <p className="text-gray-600 mb-4 leading-relaxed">
                 The Kallakurichi District Chess Association (KKDCA) is the official
@@ -89,7 +89,7 @@ export function AboutSection() {
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white font-semibold rounded-xl hover:from-purple-700 hover:via-pink-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all shadow-md hover:shadow-lg"
               >
                 Learn More About Us
               </Link>

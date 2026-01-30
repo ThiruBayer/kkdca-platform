@@ -1,6 +1,8 @@
 import { HeroSection } from '@/components/home/hero-section';
 import { StatsSection } from '@/components/home/stats-section';
 import { AboutSection } from '@/components/home/about-section';
+import { BenefitsSection } from '@/components/home/benefits-section';
+import { HistorySection } from '@/components/home/history-section';
 import { OfficeBearersSection } from '@/components/home/office-bearers-section';
 import { GallerySection } from '@/components/home/gallery-section';
 import { TournamentsSection } from '@/components/home/tournaments-section';
@@ -15,6 +17,8 @@ export default function HomePage() {
       <HeroSection />
       <StatsSection />
       <AboutSection />
+      <BenefitsSection />
+      <HistorySection />
       <OfficeBearersSection />
       <GallerySection />
       <TournamentsSection />

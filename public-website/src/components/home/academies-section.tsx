@@ -24,7 +24,7 @@ interface Academy {
 
 const academyGradients = [
   'from-blue-500 to-indigo-600',
-  'from-purple-500 to-pink-600',
+  'from-primary-500 to-primary-700',
   'from-emerald-500 to-teal-600',
   'from-orange-500 to-red-500',
 ];
@@ -54,7 +54,7 @@ export function AcademiesSection() {
           </div>
           <Link
             href="/academies"
-            className="hidden sm:flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+            className="hidden sm:flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
           >
             View all academies
             <ArrowRight className="w-4 h-4" />
@@ -109,7 +109,7 @@ export function AcademiesSection() {
                   )}
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors line-clamp-1">
+                  <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-1">
                     {academy.name}
                   </h3>
 
@@ -146,7 +146,7 @@ export function AcademiesSection() {
 
         <Link
           href="/academies"
-          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
         >
           View all academies
           <ArrowRight className="w-4 h-4" />

@@ -13,7 +13,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-orange-400">
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-500">
                 <Image
                   src="/images/logo/KKDCA_LOGO.jpg"
                   alt="KKDCA Logo"
@@ -99,7 +99,7 @@ export function Footer() {
             <h3 className="text-white font-semibold mb-5">Contact Us</h3>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="h-4 w-4 mt-1 text-pink-400 flex-shrink-0" />
+                <MapPin className="h-4 w-4 mt-1 text-primary-400 flex-shrink-0" />
                 <span>24C, Anna Nagar, Kallakurichi,<br />Tamil Nadu, India</span>
               </li>
               <li className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export function Footer() {
                 </div>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                <Mail className="h-4 w-4 text-secondary-400 flex-shrink-0" />
                 <a href="mailto:kallaichess@gmail.com" className="hover:text-yellow-400 transition-colors">kallaichess@gmail.com</a>
               </li>
             </ul>

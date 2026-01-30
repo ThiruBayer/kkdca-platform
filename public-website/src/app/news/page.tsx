@@ -51,7 +51,7 @@ export default function NewsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white py-16">
+      <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-bold mb-4">News & Updates</h1>

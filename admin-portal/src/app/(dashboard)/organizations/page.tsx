@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import {
   Search,
@@ -58,6 +59,7 @@ export default function OrganizationsPage() {
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-organizations', { search, type, status, page }],
@@ -223,7 +225,11 @@ export default function OrganizationsPage() {
                         </button>
                       </>
                     )}
-                    <button className="p-2 hover:bg-gray-100 rounded-lg" title="View Details">
+                    <button
+                      className="p-2 hover:bg-gray-100 rounded-lg"
+                      title="View Details"
+                      onClick={() => router.push(`/organizations/${org.id}`)}
+                    >
                       <Eye className="w-5 h-5 text-gray-600" />
                     </button>
                   </div>

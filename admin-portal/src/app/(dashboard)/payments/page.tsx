@@ -74,6 +74,29 @@ export default function PaymentsPage() {
   const pagination = data?.pagination || { total: 0, pages: 1 };
   const summary = data?.summary || { total: 0, success: 0, pending: 0, failed: 0 };
 
+  const exportPaymentsCSV = () => {
+    if (!payments.length) return;
+    const headers = ['Transaction ID', 'Receipt No', 'Name', 'Email', 'Purpose', 'Amount', 'Status', 'Date'];
+    const rows = payments.map((p) => [
+      p.gatewayOrderId || p.id,
+      p.receiptNo || '',
+      `${p.user?.firstName || ''} ${p.user?.lastName || ''}`.trim(),
+      p.user?.email || '',
+      p.purpose,
+      p.amount,
+      p.status,
+      p.createdAt,
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `payments-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',
@@ -99,7 +122,10 @@ export default function PaymentsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Payments</h1>
           <p className="text-gray-600">Track and manage all transactions</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+        <button
+          onClick={exportPaymentsCSV}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+        >
           <Download className="w-4 h-4" />
           Export Report
         </button>

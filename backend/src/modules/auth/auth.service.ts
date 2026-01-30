@@ -7,6 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserRole, UserStatus } from '@prisma/client';
@@ -36,8 +37,8 @@ export class AuthService {
       throw new ConflictException('Phone number already registered');
     }
 
-    // Store password (temporary: plain-text)
-    const passwordHash = dto.password;
+    // Hash password with bcrypt
+    const passwordHash = await bcrypt.hash(dto.password, 12);
 
     // Create user
     const user = await this.prisma.user.create({
@@ -124,8 +125,9 @@ export class AuthService {
       );
     }
 
-    // Verify password (temporary: plain-text comparison)
-    if (dto.password !== user.passwordHash) {
+    // Verify password using bcrypt
+    const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
+    if (!isMatch) {
       // Increment failed login count
       await this.prisma.user.update({
         where: { id: user.id },
@@ -258,7 +260,7 @@ export class AuthService {
       where: { email },
     });
 
-    if (user && password === user.passwordHash) {
+    if (user && (await bcrypt.compare(password, user.passwordHash))) {
       return user;
     }
 
@@ -295,11 +297,12 @@ export class AuthService {
       throw new BadRequestException('User not found');
     }
 
-    if (currentPassword !== user.passwordHash) {
+    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isMatch) {
       throw new BadRequestException('Current password is incorrect');
     }
 
-    const passwordHash = newPassword;
+    const passwordHash = await bcrypt.hash(newPassword, 12);
 
     await this.prisma.user.update({
       where: { id: userId },

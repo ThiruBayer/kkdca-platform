@@ -32,7 +32,7 @@ const statusColors: Record<string, string> = {
   UPCOMING: 'bg-blue-100 text-blue-700',
   REGISTRATION_OPEN: 'bg-green-100 text-green-700',
   REGISTRATION_CLOSED: 'bg-yellow-100 text-yellow-700',
-  IN_PROGRESS: 'bg-purple-100 text-purple-700',
+  IN_PROGRESS: 'bg-teal-100 text-teal-700',
   COMPLETED: 'bg-gray-100 text-gray-700',
 };
 
@@ -65,7 +65,7 @@ export default function TournamentsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white py-16">
+      <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-bold mb-4">Tournaments</h1>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import {
   Search,
@@ -46,6 +47,7 @@ export default function PlayersPage() {
   const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-players', { search, status, page }],
@@ -74,6 +76,31 @@ export default function PlayersPage() {
   const players: Player[] = data?.data || [];
   const pagination = data?.pagination || { total: 0, pages: 1 };
 
+  const exportPlayersCSV = () => {
+    if (!players.length) return;
+    const headers = ['Name', 'Email', 'Phone', 'FIDE ID', 'AICF ID', 'Gender', 'Date of Birth', 'Taluk', 'Status', 'Registered'];
+    const rows = players.map((p) => [
+      `${p.profile?.firstName || ''} ${p.profile?.lastName || ''}`.trim(),
+      p.email,
+      p.phone,
+      p.profile?.fideId || '',
+      p.profile?.aicfId || '',
+      p.profile?.gender || '',
+      p.profile?.dateOfBirth || '',
+      p.taluk?.name || '',
+      p.status,
+      p.createdAt,
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `players-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: 'numeric',
@@ -89,7 +116,10 @@ export default function PlayersPage() {
           <h1 className="text-2xl font-bold text-gray-900">Players</h1>
           <p className="text-gray-600">Manage registered players</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+        <button
+          onClick={exportPlayersCSV}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+        >
           <Download className="w-4 h-4" />
           Export
         </button>
@@ -202,7 +232,11 @@ export default function PlayersPage() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded-lg" title="View">
+                        <button
+                          className="p-2 hover:bg-gray-100 rounded-lg"
+                          title="View"
+                          onClick={() => router.push(`/players/${player.id}`)}
+                        >
                           <Eye className="w-4 h-4 text-gray-600" />
                         </button>
                         {player.status === 'ACTIVE' ? (
