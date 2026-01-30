@@ -221,7 +221,7 @@ export default function MyProfilePage() {
             <div className="flex items-center gap-2 mt-1">
               {profile?.kdcaId && (
                 <span className="text-xs font-medium text-primary-700 bg-primary-50 px-2 py-0.5 rounded">
-                  KDCA ID: {profile.kdcaId}
+                  KKDCA ID: {profile.kdcaId}
                 </span>
               )}
               <span className={`text-xs font-medium px-2 py-0.5 rounded ${

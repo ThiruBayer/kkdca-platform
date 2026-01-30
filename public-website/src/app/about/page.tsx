@@ -64,16 +64,6 @@ const affiliations = [
     full: 'Tamil Nadu State Chess Association',
     href: 'https://tamilchess.com',
   },
-  {
-    name: 'AICF',
-    full: 'All India Chess Federation',
-    href: 'https://aicf.in',
-  },
-  {
-    name: 'FIDE',
-    full: 'World Chess Federation',
-    href: 'https://www.fide.com',
-  },
 ];
 
 export default function AboutPage() {
@@ -123,8 +113,7 @@ export default function AboutPage() {
                   association, bringing their years of experience and passion to this new chapter.
                 </p>
                 <p>
-                  Affiliated with the Tamil Nadu State Chess Association (TNSCA), the All India
-                  Chess Federation (AICF), and the World Chess Federation (FIDE), KKDCA
+                  Affiliated with the Tamil Nadu State Chess Association (TNSCA), KKDCA
                   continues to work towards making Kallakurichi a hub for chess excellence in
                   Tamil Nadu.
                 </p>
@@ -252,7 +241,7 @@ export default function AboutPage() {
               <div key={index} className="flex gap-6 mb-8 last:mb-0">
                 <div className="flex flex-col items-center">
                   <div className="w-12 h-12 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
-                    {milestone.year}
+                    <span className="text-lg">♟</span>
                   </div>
                   {index < milestones.length - 1 && (
                     <div className="w-0.5 h-full bg-teal-200 mt-2" />
@@ -273,12 +262,12 @@ export default function AboutPage() {
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Affiliations</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Affiliation</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              KKDCA is proud to be affiliated with these prestigious chess organizations
+              KKDCA is proudly affiliated with the Tamil Nadu State Chess Association
             </p>
           </div>
-          <div className="grid sm:grid-cols-3 gap-8 max-w-3xl mx-auto">
+          <div className="flex justify-center max-w-3xl mx-auto">
             {affiliations.map((org) => (
               <a
                 key={org.name}

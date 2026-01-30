@@ -9,7 +9,7 @@ const achievements = [
   'World Record: 3,065 chess boards in single event',
   '450+ chess boards donated to government schools',
   'Free chess training to 100+ schools',
-  'Affiliated with TNSCA, AICF & FIDE',
+  'Affiliated with TNSCA',
 ];
 
 const features = [
@@ -24,7 +24,7 @@ const features = [
   {
     icon: Award,
     title: 'Excellence',
-    description: 'Organizing FIDE-rated tournaments and nurturing talent to compete at state, national, and international levels.',
+    description: 'Organizing rated tournaments and nurturing talent to compete at state, national, and international levels.',
     gradient: 'from-yellow-500 to-orange-500',
     bg: 'bg-gradient-to-br from-yellow-50 to-orange-50',
     border: 'border-yellow-200',
@@ -68,8 +68,7 @@ export function AboutSection() {
               <p className="text-gray-600 mb-4 leading-relaxed">
                 The Kallakurichi District Chess Association (KKDCA) is the official
                 governing body for chess activities in Kallakurichi district,
-                affiliated with the Tamil Nadu State Chess Association (TNSCA)
-                and All India Chess Federation (AICF).
+                affiliated with the Tamil Nadu State Chess Association (TNSCA).
               </p>
               <p className="text-gray-600 mb-6 leading-relaxed">
                 Founded in 2019 under the leadership of President V. Palani and

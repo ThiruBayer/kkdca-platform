@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Trophy, Users, Star, ChevronDown, Sparkles } from 'lucide-react';
 
+
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
@@ -32,7 +33,7 @@ export function HeroSection() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/20 to-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-teal-500/30">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              Established 2019 &bull; Affiliated with TNSCA &amp; AICF
+              Established 2019 &bull; Affiliated with TNSCA
             </div>
 
             {/* Heading */}
@@ -108,22 +109,6 @@ export function HeroSection() {
                 />
               </div>
 
-              {/* Hero image - bigger, beside the logo */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="absolute -bottom-10 -right-20 w-56 h-44 rounded-2xl overflow-hidden border-4 border-amber-400/50 shadow-2xl shadow-amber-500/30"
-              >
-                <Image
-                  src="/images/hero.jfif"
-                  alt="Chess Champions - KKDCA"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </motion.div>
-
               {/* Floating chess activity image */}
               <div className="absolute -top-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-teal-400/40 shadow-xl shadow-teal-500/20">
                 <Image
@@ -139,6 +124,16 @@ export function HeroSection() {
                 <Image
                   src="/images/gallery/chesstournament.jfif"
                   alt="Chess Tournament"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              {/* Hero image - small floating card */}
+              <div className="absolute -bottom-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-emerald-400/40 shadow-xl shadow-emerald-500/20">
+                <Image
+                  src="/images/hero.jfif"
+                  alt="Chess Champions - KKDCA"
                   fill
                   className="object-cover"
                 />

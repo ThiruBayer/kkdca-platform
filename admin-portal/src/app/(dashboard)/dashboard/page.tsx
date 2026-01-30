@@ -100,7 +100,7 @@ function PlayerDashboard() {
             <p className="text-gray-500">{user?.email}</p>
             {profile?.kdcaId && (
               <span className="inline-flex items-center px-2 py-0.5 mt-1 rounded text-xs font-medium bg-primary-100 text-primary-700">
-                KDCA ID: {profile.kdcaId}
+                KKDCA ID: {profile.kdcaId}
               </span>
             )}
           </div>

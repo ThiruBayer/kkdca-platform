@@ -19,6 +19,16 @@ const navigation = [
       { name: 'Chess Academies', href: '/academies' },
     ],
   },
+  {
+    name: 'Resources',
+    href: '#',
+    children: [
+      { name: 'Laws of Chess', href: '/images/downloads/LawsOfChess.pdf' },
+      { name: 'District Tournament Bid Form', href: '/images/downloads/District Tournament Bidform.pdf' },
+      { name: 'State Tournament Bid Form', href: '/images/downloads/State Tournament Bidform.pdf' },
+      { name: 'TNSCA', href: 'https://www.tnsca.in' },
+    ],
+  },
   { name: 'News', href: '/news' },
   { name: 'Contact', href: '/contact' },
 ];
@@ -26,14 +36,14 @@ const navigation = [
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClick);
@@ -82,23 +92,25 @@ export function Header() {
               item.children ? (
                 <div key={item.name} className="relative" ref={dropdownRef}>
                   <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
                     className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-all"
                   >
                     {item.name}
-                    <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
                   </button>
-                  {dropdownOpen && (
-                    <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                  {openDropdown === item.name && (
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
                       {item.children.map((child) => (
-                        <Link
+                        <a
                           key={child.name}
                           href={child.href}
+                          target={child.href.startsWith('http') || child.href.endsWith('.pdf') ? '_blank' : undefined}
+                          rel={child.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 transition-all"
-                          onClick={() => setDropdownOpen(false)}
+                          onClick={() => setOpenDropdown(null)}
                         >
                           {child.name}
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   )}

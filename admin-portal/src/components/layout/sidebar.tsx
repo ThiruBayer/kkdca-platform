@@ -55,7 +55,7 @@ export function Sidebar() {
                 <span className="text-white font-bold">K</span>
               </div>
               <span className="font-semibold text-gray-900">
-                {user?.role && ADMIN_ROLES.includes(user.role) ? 'KDCA Admin' : 'KDCA Player'}
+                {user?.role && ADMIN_ROLES.includes(user.role) ? 'KKDCA Admin' : 'KKDCA Player'}
               </span>
             </Link>
           )}
