@@ -48,6 +48,8 @@ export class PaymentsService {
         customerEmail: user.email,
         customerPhone: user.phone,
         customerId: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName || undefined,
         returnUrl,
         description: `KKDCA Membership Fee ${new Date().getFullYear()}`,
       });
@@ -106,6 +108,8 @@ export class PaymentsService {
         customerEmail: user.email,
         customerPhone: user.phone,
         customerId: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName || undefined,
         returnUrl,
         description: `KKDCA Membership Fee ${new Date().getFullYear()}`,
       });

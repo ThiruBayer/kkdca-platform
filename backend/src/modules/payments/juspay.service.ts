@@ -1,19 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-export interface JuspaySessionRequest {
-  order_id: string;
-  amount: string;
-  customer_id: string;
-  customer_email: string;
-  customer_phone: string;
-  payment_page_client_id: string;
-  action: string;
-  return_url: string;
-  description?: string;
-  currency?: string;
-}
-
 export interface JuspaySessionResponse {
   status: string;
   id: string;
@@ -42,14 +29,19 @@ export class JuspayService {
   private readonly apiBaseUrl: string;
   private readonly apiKey: string;
   private readonly merchantId: string;
+  private readonly paymentPageClientId: string;
 
   constructor(private configService: ConfigService) {
     this.apiBaseUrl = this.configService.get<string>(
       'JUSPAY_API_BASE_URL',
-      'https://api.juspay.in',
+      'https://smartgateway.hdfcbank.in',
     );
     this.apiKey = this.configService.get<string>('JUSPAY_API_KEY', '');
     this.merchantId = this.configService.get<string>('JUSPAY_MERCHANT_ID', '');
+    this.paymentPageClientId = this.configService.get<string>(
+      'JUSPAY_PAYMENT_PAGE_CLIENT_ID',
+      'hdfcmaster',
+    );
   }
 
   private getAuthHeader(): string {
@@ -63,21 +55,25 @@ export class JuspayService {
     customerEmail: string;
     customerPhone: string;
     customerId: string;
+    firstName?: string;
+    lastName?: string;
     returnUrl: string;
     description?: string;
   }): Promise<JuspaySessionResponse> {
-    const body = new URLSearchParams({
+    const body = {
       order_id: params.orderId,
       amount: params.amount.toFixed(2),
+      currency: 'INR',
       customer_id: params.customerId,
       customer_email: params.customerEmail,
       customer_phone: params.customerPhone,
-      payment_page_client_id: this.merchantId,
+      payment_page_client_id: this.paymentPageClientId,
       action: 'paymentPage',
       return_url: params.returnUrl,
-      currency: 'INR',
-      ...(params.description && { description: params.description }),
-    });
+      description: params.description || 'Complete your payment',
+      ...(params.firstName && { first_name: params.firstName }),
+      ...(params.lastName && { last_name: params.lastName }),
+    };
 
     this.logger.log(`Creating Juspay session for order: ${params.orderId}`);
 
@@ -85,16 +81,18 @@ export class JuspayService {
       method: 'POST',
       headers: {
         'Authorization': this.getAuthHeader(),
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
         'x-merchantid': this.merchantId,
+        'x-customerid': params.customerId,
+        'version': '2023-06-30',
       },
-      body: body.toString(),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       this.logger.error(`Juspay session creation failed: ${response.status} - ${errorText}`);
-      throw new Error(`Juspay session creation failed: ${response.status}`);
+      throw new Error(`Juspay session creation failed: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
@@ -108,11 +106,13 @@ export class JuspayService {
     const response = await fetch(
       `${this.apiBaseUrl}/orders/${orderId}`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Authorization': this.getAuthHeader(),
+          'Content-Type': 'application/x-www-form-urlencoded',
           'x-merchantid': this.merchantId,
         },
+        body: '',
       },
     );
 
