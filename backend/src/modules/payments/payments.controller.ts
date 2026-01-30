@@ -6,6 +6,9 @@ import {
   Param,
   Query,
   UseGuards,
+  HttpCode,
+  HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
@@ -15,7 +18,15 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 @ApiTags('payments')
 @Controller('payments')
 export class PaymentsController {
+  private readonly logger = new Logger(PaymentsController.name);
+
   constructor(private readonly paymentsService: PaymentsService) {}
+
+  @Post('registration')
+  @ApiOperation({ summary: 'Initiate payment for new registration (public)' })
+  async initiateRegistrationPayment(@Body('userId') userId: string) {
+    return this.paymentsService.initiateRegistrationPayment(userId);
+  }
 
   @Post('membership')
   @UseGuards(JwtAuthGuard)
@@ -41,10 +52,28 @@ export class PaymentsController {
     );
   }
 
+  @Post('webhook')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Juspay webhook callback' })
+  async handleWebhook(@Body() body: any) {
+    this.logger.log(`Received webhook: ${JSON.stringify(body)}`);
+    const orderId = body.order_id || body.content?.order?.order_id || body.orderId;
+    if (!orderId) {
+      return { status: 'error', message: 'No order_id found' };
+    }
+    return this.paymentsService.handleCallback(orderId, body);
+  }
+
   @Post('callback')
-  @ApiOperation({ summary: 'Payment gateway callback' })
+  @ApiOperation({ summary: 'Payment gateway callback (legacy)' })
   async handleCallback(@Body() body: any) {
-    return this.paymentsService.handleCallback(body.orderId, body);
+    return this.paymentsService.handleCallback(body.orderId || body.order_id, body);
+  }
+
+  @Get('verify/:orderId')
+  @ApiOperation({ summary: 'Verify payment status with gateway (public)' })
+  async verifyPaymentStatus(@Param('orderId') orderId: string) {
+    return this.paymentsService.verifyAndGetStatus(orderId);
   }
 
   @Get('status/:orderId')

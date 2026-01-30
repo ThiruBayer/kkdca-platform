@@ -97,7 +97,7 @@ export default function RegisterPage() {
 
     try {
       const { confirmPassword, ...payload } = form;
-      await api.post('/auth/register', {
+      const regRes = await api.post('/auth/register', {
         ...payload,
         role: 'PLAYER',
         password: loginEnabled ? payload.password : `KKdca@${Date.now()}`,
@@ -109,6 +109,23 @@ export default function RegisterPage() {
         aicfId: payload.aicfId || undefined,
         tncaId: payload.tncaId || undefined,
       });
+
+      // Initiate payment after registration
+      const userId = regRes.data?.user?.id;
+      if (userId) {
+        try {
+          const payRes = await api.post('/payments/registration', { userId });
+          const paymentLink = payRes.data?.payment_links?.web;
+          if (paymentLink) {
+            window.location.href = paymentLink;
+            return;
+          }
+        } catch (payErr: any) {
+          // Payment initiation failed - still show success but note payment pending
+          console.error('Payment initiation failed:', payErr);
+        }
+      }
+
       setStatus('success');
     } catch (err: any) {
       setStatus('error');
@@ -139,7 +156,6 @@ export default function RegisterPage() {
                 <ul className="text-amber-700 mt-1 space-y-1">
                   <li>Admin will review your registration</li>
                   <li>Your KKDCA ID will be generated upon approval</li>
-                  <li>Membership fee of Rs.75 is payable after approval</li>
                 </ul>
               </div>
             </div>
@@ -213,8 +229,7 @@ export default function RegisterPage() {
                 <p className="font-semibold text-blue-800">Registration Requirements</p>
                 <ul className="text-blue-700 mt-1 space-y-0.5">
                   <li>Photo, Birth Certificate, and Aadhaar are mandatory for verification</li>
-                  <li>KKDCA Annual Membership Fee: <strong>Rs.75</strong> (payable after approval)</li>
-                  <li>FIDE, AICF, TNSCA IDs are optional — can be updated later</li>
+                  <li>KKDCA Annual Membership Fee: <strong>Rs.75</strong> — payable during registration</li>
                 </ul>
               </div>
             </div>
@@ -379,23 +394,13 @@ export default function RegisterPage() {
               <h3 className="text-lg font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block">
                 Chess Federation IDs & Account Password
               </h3>
-              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-semibold text-green-800">Chess IDs are optional</p>
-                    <p className="text-green-700">You can add your FIDE, AICF, and TNSCA IDs if you have them. These can be updated later in your profile.</p>
-                  </div>
-                </div>
-              </div>
-
               <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
                 <div className="flex items-start gap-3">
                   <CreditCard className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
                   <div className="text-sm">
                     <p className="font-bold text-amber-800">Membership Fee - Rs.75</p>
                     <p className="font-semibold text-amber-700">KKDCA Annual Membership Fee: Rs.75</p>
-                    <p className="text-amber-600 mt-0.5">Valid from January 2026 to December 31, 2026. After completing the form, admin will review and upon approval, you will be notified to pay the membership fee. Upon successful payment, your KKDCA ID will be generated.</p>
+                    <p className="text-amber-600 mt-0.5">Valid from January 2026 to December 31, 2026. After completing the form, you will be redirected to the payment page. Upon successful payment, your registration will be submitted for admin review.</p>
                   </div>
                 </div>
               </div>
@@ -468,7 +473,7 @@ export default function RegisterPage() {
                 disabled={status === 'submitting'}
                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 font-medium transition-colors">
                 {status === 'submitting' ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-                {status === 'submitting' ? 'Submitting...' : 'Complete Registration'}
+                {status === 'submitting' ? 'Processing...' : 'Pay & Register — ₹75'}
               </button>
             )}
           </div>
