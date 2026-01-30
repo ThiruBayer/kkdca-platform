@@ -160,6 +160,66 @@ export class AdminService {
     });
   }
 
+  async getAllPayments(params: {
+    search?: string;
+    status?: string;
+    from?: string;
+    to?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const { search, status, from, to, page = 1, limit = 20 } = params;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (status) where.status = status;
+    if (from || to) {
+      where.createdAt = {};
+      if (from) where.createdAt.gte = new Date(from);
+      if (to) where.createdAt.lte = new Date(to + 'T23:59:59');
+    }
+    if (search) {
+      where.OR = [
+        { gatewayOrderId: { contains: search, mode: 'insensitive' } },
+        { receiptNo: { contains: search, mode: 'insensitive' } },
+        { user: { firstName: { contains: search, mode: 'insensitive' } } },
+        { user: { lastName: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    const [payments, total, successAgg, pendingAgg, failedAgg] = await Promise.all([
+      this.prisma.payment.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: { select: { firstName: true, lastName: true, email: true, kdcaId: true } },
+        },
+      }),
+      this.prisma.payment.count({ where }),
+      this.prisma.payment.aggregate({ where: { ...where, status: 'SUCCESS' }, _sum: { amount: true } }),
+      this.prisma.payment.aggregate({ where: { ...where, status: 'PENDING' }, _sum: { amount: true } }),
+      this.prisma.payment.aggregate({ where: { ...where, status: 'FAILED' }, _sum: { amount: true } }),
+    ]);
+
+    const successTotal = successAgg._sum.amount || 0;
+    const pendingTotal = pendingAgg._sum.amount || 0;
+    const failedTotal = failedAgg._sum.amount || 0;
+
+    return {
+      data: payments,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit), pages: Math.ceil(total / limit) },
+      summary: {
+        total: Number(successTotal) + Number(pendingTotal) + Number(failedTotal),
+        success: Number(successTotal),
+        pending: Number(pendingTotal),
+        failed: Number(failedTotal),
+      },
+    };
+  }
+
   async getPaymentReports(from: Date, to: Date) {
     const payments = await this.prisma.payment.findMany({
       where: {
