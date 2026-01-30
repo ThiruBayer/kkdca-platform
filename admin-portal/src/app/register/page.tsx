@@ -19,7 +19,17 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [taluks, setTaluks] = useState<{ id: string; name: string }[]>([]);
+  const [taluks, setTaluks] = useState<{ id: string; name: string; code?: string }[]>([]);
+
+  // Taluk code to pincode mapping for Kallakurichi district
+  const talukPincodeMap: Record<string, string> = {
+    'KKI': '606202',
+    'CHI': '606201',
+    'SAN': '606401',
+    'ULP': '606107',
+    'TKR': '605757',
+    'KVH': '606303',
+  };
   const [loginEnabled, setLoginEnabled] = useState(false);
 
   const photoRef = useRef<HTMLInputElement>(null);
@@ -59,7 +69,17 @@ export default function RegisterPage() {
   }, []);
 
   const updateField = (key: string, value: string) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setForm((prev) => {
+      const updated = { ...prev, [key]: value };
+      // Auto-fill pincode when taluk is selected
+      if (key === 'talukId' && value) {
+        const selectedTaluk = taluks.find((t) => t.id === value);
+        if (selectedTaluk?.code && talukPincodeMap[selectedTaluk.code]) {
+          updated.pincode = talukPincodeMap[selectedTaluk.code];
+        }
+      }
+      return updated;
+    });
   };
 
   const handleSubmit = async () => {
@@ -80,7 +100,7 @@ export default function RegisterPage() {
       await api.post('/auth/register', {
         ...payload,
         role: 'PLAYER',
-        password: loginEnabled ? payload.password : `KKDCA_${Date.now()}`,
+        password: loginEnabled ? payload.password : `KKdca@${Date.now()}`,
         gender: payload.gender || undefined,
         talukId: payload.talukId || undefined,
         guardianName: payload.guardianName || undefined,
@@ -283,14 +303,14 @@ export default function RegisterPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className={labelClass}>State <span className="text-gray-400 font-normal">(optional)</span></label>
-                  <input type="text" value={form.state} onChange={(e) => updateField('state', e.target.value)}
-                    className={inputClass} />
+                  <label className={labelClass}>State</label>
+                  <input type="text" value={form.state} readOnly
+                    className={inputClass + ' bg-gray-100 text-gray-600 cursor-not-allowed'} />
                 </div>
                 <div>
-                  <label className={labelClass}>District <span className="text-gray-400 font-normal">(optional)</span></label>
-                  <input type="text" value={form.district} onChange={(e) => updateField('district', e.target.value)}
-                    className={inputClass} />
+                  <label className={labelClass}>District</label>
+                  <input type="text" value={form.district} readOnly
+                    className={inputClass + ' bg-gray-100 text-gray-600 cursor-not-allowed'} />
                 </div>
                 <div>
                   <label className={labelClass}>Taluk</label>
@@ -303,7 +323,7 @@ export default function RegisterPage() {
                 <div>
                   <label className={labelClass}>Pincode</label>
                   <input type="text" value={form.pincode} onChange={(e) => updateField('pincode', e.target.value)}
-                    className={inputClass} placeholder="Enter pincode" maxLength={6} />
+                    className={inputClass} placeholder="Auto-filled by taluk" maxLength={6} />
                 </div>
               </div>
             </>
