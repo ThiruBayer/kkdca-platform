@@ -52,11 +52,14 @@ export function Header() {
         ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100'
         : 'bg-white/80 backdrop-blur-sm'
     }`}>
+      {/* Rainbow top bar */}
+      <div className="h-1 rainbow-bar" />
+
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-secondary-400 shadow-md">
+            <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-orange-400 shadow-md shadow-orange-200">
               <Image
                 src="/images/logo/KKDCA_LOGO.jpg"
                 alt="KKDCA Logo"
@@ -66,7 +69,7 @@ export function Header() {
               />
             </div>
             <div>
-              <span className="font-extrabold text-primary-800 text-lg leading-none">KKDCA</span>
+              <span className="font-extrabold bg-gradient-to-r from-purple-700 via-blue-600 to-indigo-700 bg-clip-text text-transparent text-lg leading-none">KKDCA</span>
               <span className="hidden md:block text-[11px] text-gray-500 leading-tight">
                 Kallakurichi District Chess Association
               </span>
@@ -80,7 +83,7 @@ export function Header() {
                 <div key={item.name} className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-purple-600 rounded-lg hover:bg-purple-50 transition-all"
                   >
                     {item.name}
                     <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -91,7 +94,7 @@ export function Header() {
                         <Link
                           key={child.name}
                           href={child.href}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 transition-all"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 transition-all"
                           onClick={() => setDropdownOpen(false)}
                         >
                           {child.name}
@@ -106,8 +109,8 @@ export function Header() {
                   href={item.href}
                   className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
                     pathname === item.href
-                      ? 'text-primary-700 bg-primary-50'
-                      : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                      ? 'text-purple-700 bg-purple-50'
+                      : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
                   }`}
                 >
                   {item.name}
@@ -120,13 +123,13 @@ export function Header() {
           <div className="hidden lg:flex lg:items-center lg:gap-3">
             <Link
               href="https://register.kallaichess.com/login"
-              className="text-sm font-medium text-gray-700 hover:text-primary-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
+              className="text-sm font-medium text-gray-700 hover:text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-all"
             >
               Login
             </Link>
             <Link
               href="https://register.kallaichess.com/register"
-              className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg hover:from-primary-700 hover:to-primary-800 transition-all shadow-md hover:shadow-lg hover:scale-[1.02]"
+              className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg hover:from-purple-700 hover:via-pink-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg hover:scale-[1.02]"
             >
               Register Now
             </Link>
@@ -156,7 +159,7 @@ export function Header() {
                     <Link
                       key={child.name}
                       href={child.href}
-                      className="block px-6 py-2.5 text-base font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-700 rounded-lg transition-colors"
+                      className="block px-6 py-2.5 text-base font-medium text-gray-700 hover:bg-purple-50 hover:text-purple-700 rounded-lg transition-colors"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {child.name}
@@ -169,7 +172,7 @@ export function Header() {
                   href={item.href}
                   className={`block px-4 py-2.5 text-base font-medium rounded-lg transition-colors ${
                     pathname === item.href
-                      ? 'bg-primary-50 text-primary-700'
+                      ? 'bg-purple-50 text-purple-700'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -187,7 +190,7 @@ export function Header() {
               </Link>
               <Link
                 href="https://register.kallaichess.com/register"
-                className="block px-4 py-2.5 text-base font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg text-center shadow-md"
+                className="block px-4 py-2.5 text-base font-semibold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg text-center shadow-md"
               >
                 Register Now
               </Link>

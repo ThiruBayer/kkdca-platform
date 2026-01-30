@@ -22,12 +22,12 @@ html {
 
 /* Custom selection */
 ::selection {
-  background-color: rgba(37, 99, 235, 0.2);
+  background-color: rgba(251, 191, 36, 0.3);
 }
 
 /* Gradient text utility */
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary-400 via-saffron-400 to-accent-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500;
 }
 
 /* Glass card effect */
@@ -41,8 +41,32 @@ html {
 }
 .hover-underline::after {
   content: '';
-  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300;
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary-500 via-accent-500 to-purple-500 transition-all duration-300;
 }
 .hover-underline:hover::after {
   @apply w-full;
+}
+
+/* Rainbow animated bar */
+.rainbow-bar {
+  background: linear-gradient(90deg, #f59e0b, #ef4444, #8b5cf6, #3b82f6, #10b981, #f59e0b);
+  background-size: 200% 100%;
+  animation: rainbowSlide 4s linear infinite;
+}
+
+@keyframes rainbowSlide {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Colorful animated border */
+@keyframes borderGlow {
+  0%, 100% { border-color: #f59e0b; }
+  25% { border-color: #ef4444; }
+  50% { border-color: #8b5cf6; }
+  75% { border-color: #3b82f6; }
+}
+
+.animate-border-glow {
+  animation: borderGlow 4s ease-in-out infinite;
 }

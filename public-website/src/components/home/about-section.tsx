@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Target, Award, Users, BookOpen, CheckCircle } from 'lucide-react';
 
@@ -18,31 +17,39 @@ const features = [
     icon: Target,
     title: 'Our Mission',
     description: 'To promote chess as a tool for intellectual development and bring world-class chess infrastructure to Kallakurichi district.',
-    color: 'bg-primary-100 text-primary-600',
+    gradient: 'from-blue-500 to-indigo-600',
+    bg: 'bg-gradient-to-br from-blue-50 to-indigo-50',
+    border: 'border-blue-200',
   },
   {
     icon: Award,
     title: 'Excellence',
     description: 'Organizing FIDE-rated tournaments and nurturing talent to compete at state, national, and international levels.',
-    color: 'bg-secondary-100 text-secondary-600',
+    gradient: 'from-yellow-500 to-orange-500',
+    bg: 'bg-gradient-to-br from-yellow-50 to-orange-50',
+    border: 'border-yellow-200',
   },
   {
     icon: Users,
     title: 'Community',
     description: 'Building a vibrant chess community across all 6 taluks with active associations and training academies.',
-    color: 'bg-emerald-100 text-emerald-600',
+    gradient: 'from-emerald-500 to-teal-600',
+    bg: 'bg-gradient-to-br from-emerald-50 to-teal-50',
+    border: 'border-emerald-200',
   },
   {
     icon: BookOpen,
     title: 'Education',
     description: 'Partnering with schools to introduce chess as part of curriculum and develop cognitive skills in young minds.',
-    color: 'bg-saffron-100 text-saffron-600',
+    gradient: 'from-pink-500 to-purple-600',
+    bg: 'bg-gradient-to-br from-pink-50 to-purple-50',
+    border: 'border-pink-200',
   },
 ];
 
 export function AboutSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gradient-to-br from-white via-purple-50/30 to-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
@@ -51,12 +58,12 @@ export function AboutSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-flex items-center gap-2 text-primary-600 font-semibold mb-4 bg-primary-50 px-4 py-1.5 rounded-full text-sm">
+              <span className="inline-flex items-center gap-2 text-purple-600 font-semibold mb-4 bg-purple-50 px-4 py-1.5 rounded-full text-sm border border-purple-200">
                 About KKDCA
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 Nurturing Chess Excellence in{' '}
-                <span className="text-primary-600">Kallakurichi</span>
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Kallakurichi</span>
               </h2>
               <p className="text-gray-600 mb-4 leading-relaxed">
                 The Kallakurichi District Chess Association (KKDCA) is the official
@@ -82,7 +89,7 @@ export function AboutSection() {
 
               <Link
                 href="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white font-semibold rounded-xl hover:from-purple-700 hover:via-pink-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg"
               >
                 Learn More About Us
               </Link>
@@ -97,10 +104,10 @@ export function AboutSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-gray-50 rounded-2xl hover:shadow-lg transition-all group border border-gray-100"
+                className={`p-6 ${feature.bg} rounded-2xl hover:shadow-lg transition-all group border ${feature.border}`}
               >
-                <div className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-6 h-6" />
+                <div className={`w-12 h-12 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}>
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {feature.title}

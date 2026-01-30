@@ -24,16 +24,16 @@ export function StatsSection() {
   };
 
   const items = [
-    { label: 'Registered Players', value: stats.totalPlayers, icon: Users, color: 'from-primary-500 to-primary-600', bg: 'bg-primary-50', text: 'text-primary-600' },
-    { label: 'Tournaments Hosted', value: stats.totalTournaments, icon: Trophy, color: 'from-secondary-500 to-secondary-600', bg: 'bg-secondary-50', text: 'text-secondary-600' },
-    { label: 'Chess Academies', value: stats.totalAcademies, icon: Building2, color: 'from-emerald-500 to-emerald-600', bg: 'bg-emerald-50', text: 'text-emerald-600' },
-    { label: 'Taluk Associations', value: stats.totalTaluks, icon: MapPin, color: 'from-saffron-500 to-saffron-600', bg: 'bg-saffron-50', text: 'text-saffron-600' },
+    { label: 'Registered Players', value: stats.totalPlayers, icon: Users, iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600', shadow: 'shadow-blue-500/30' },
+    { label: 'Tournaments Hosted', value: stats.totalTournaments, icon: Trophy, iconBg: 'bg-gradient-to-br from-yellow-500 to-orange-500', shadow: 'shadow-orange-500/30' },
+    { label: 'Chess Academies', value: stats.totalAcademies, icon: Building2, iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-600', shadow: 'shadow-emerald-500/30' },
+    { label: 'Taluk Associations', value: stats.totalTaluks, icon: MapPin, iconBg: 'bg-gradient-to-br from-pink-500 to-purple-600', shadow: 'shadow-pink-500/30' },
   ];
 
   return (
     <section className="py-16 bg-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-saffron-500" />
+      {/* Rainbow top bar */}
+      <div className="absolute top-0 left-0 w-full h-1 rainbow-bar" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -46,8 +46,8 @@ export function StatsSection() {
               viewport={{ once: true }}
               className="text-center group"
             >
-              <div className={`inline-flex items-center justify-center w-16 h-16 ${item.bg} rounded-2xl mb-4 group-hover:scale-110 transition-transform shadow-sm`}>
-                <item.icon className={`w-8 h-8 ${item.text}`} />
+              <div className={`inline-flex items-center justify-center w-16 h-16 ${item.iconBg} rounded-2xl mb-4 group-hover:scale-110 transition-transform shadow-lg ${item.shadow}`}>
+                <item.icon className="w-8 h-8 text-white" />
               </div>
               <div className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-1">
                 {item.value.toLocaleString()}+

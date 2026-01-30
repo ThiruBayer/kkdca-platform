@@ -19,12 +19,12 @@ interface Taluk {
 }
 
 const talukColors = [
-  'from-primary-500 to-primary-600',
-  'from-secondary-500 to-secondary-600',
-  'from-emerald-500 to-emerald-600',
-  'from-saffron-500 to-saffron-600',
-  'from-accent-500 to-accent-600',
-  'from-purple-500 to-purple-600',
+  'from-blue-500 to-indigo-600',
+  'from-yellow-500 to-orange-500',
+  'from-emerald-500 to-teal-600',
+  'from-pink-500 to-rose-600',
+  'from-purple-500 to-violet-600',
+  'from-orange-500 to-red-500',
 ];
 
 export function AssociationsSection() {
@@ -36,10 +36,11 @@ export function AssociationsSection() {
   const taluks: Taluk[] = data || [];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-900 text-white relative overflow-hidden">
-      {/* Decorative */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-saffron-500/10 rounded-full blur-3xl" />
+    <section className="py-20 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 text-white relative overflow-hidden">
+      {/* Colorful decorative blobs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-pink-500/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-yellow-500/15 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
@@ -48,11 +49,11 @@ export function AssociationsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center gap-2 text-secondary-300 font-semibold mb-4 bg-secondary-500/20 px-4 py-1.5 rounded-full text-sm border border-secondary-500/30">
+            <span className="inline-flex items-center gap-2 text-yellow-300 font-semibold mb-4 bg-yellow-500/20 px-4 py-1.5 rounded-full text-sm border border-yellow-500/30">
               Our Network
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Taluk Chess Associations</h2>
-            <p className="text-primary-200 max-w-2xl mx-auto">
+            <p className="text-blue-200 max-w-2xl mx-auto">
               KKDCA operates through 6 taluk associations, each promoting chess
               at the local level and identifying talented players.
             </p>
@@ -67,15 +68,15 @@ export function AssociationsSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
               viewport={{ once: true }}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/15 transition-all border border-white/10 group"
+              className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all border border-white/10 group"
             >
               <div className="flex items-start gap-4">
                 <div className={`w-14 h-14 bg-gradient-to-br ${talukColors[index % talukColors.length]} rounded-xl flex items-center justify-center font-bold text-lg text-white shadow-lg`}>
                   {taluk.code}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1 group-hover:text-secondary-300 transition-colors">{taluk.name}</h3>
-                  <p className="text-primary-300 text-sm">{taluk.nameTamil}</p>
+                  <h3 className="text-lg font-semibold mb-1 group-hover:text-yellow-300 transition-colors">{taluk.name}</h3>
+                  <p className="text-blue-300 text-sm">{taluk.nameTamil}</p>
                 </div>
               </div>
             </motion.div>
@@ -85,7 +86,7 @@ export function AssociationsSection() {
         <div className="text-center">
           <Link
             href="/associations"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-secondary-400 to-secondary-500 text-primary-900 font-semibold rounded-xl hover:from-secondary-300 hover:to-secondary-400 transition-all shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 text-gray-900 font-semibold rounded-xl hover:from-yellow-300 hover:via-orange-300 hover:to-pink-400 transition-all shadow-lg"
           >
             View Association Details
             <ArrowRight className="w-4 h-4" />
