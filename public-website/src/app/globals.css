@@ -22,5 +22,27 @@ html {
 
 /* Custom selection */
 ::selection {
-  background-color: rgba(6, 182, 212, 0.2);
+  background-color: rgba(37, 99, 235, 0.2);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary-400 via-saffron-400 to-accent-400;
+}
+
+/* Glass card effect */
+.glass-card {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl;
+}
+
+/* Colorful underline on hover */
+.hover-underline {
+  @apply relative;
+}
+.hover-underline::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 transition-all duration-300;
+}
+.hover-underline:hover::after {
+  @apply w-full;
 }

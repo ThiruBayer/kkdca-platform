@@ -107,7 +107,7 @@ export function AcademiesSection() {
                         key={star}
                         className={`w-4 h-4 ${
                           star <= academy.rating
-                            ? 'text-accent-500 fill-accent-500'
+                            ? 'text-secondary-500 fill-secondary-500'
                             : 'text-gray-200'
                         }`}
                       />

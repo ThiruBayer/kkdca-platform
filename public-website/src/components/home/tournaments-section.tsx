@@ -111,7 +111,7 @@ export function TournamentsSection() {
                     <span className="px-3 py-1 bg-primary-50 text-primary-700 text-sm font-medium rounded-full">
                       {tournament.category}
                     </span>
-                    <span className="text-sm text-accent-600 font-medium">
+                    <span className="text-sm text-saffron-600 font-medium">
                       {getDaysUntil(tournament.registrationDeadline)}
                     </span>
                   </div>
