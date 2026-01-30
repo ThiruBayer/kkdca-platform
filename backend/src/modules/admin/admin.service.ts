@@ -172,7 +172,7 @@ export class AdminService {
       orderBy: { completedAt: 'desc' },
     });
 
-    const total = payments.reduce((sum, p) => sum + Number(p.amount), 0);
+    const total = payments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
 
     return {
       payments,

@@ -179,7 +179,7 @@ export class UsersService {
     ]);
 
     return {
-      data: users.map((user) => ({
+      data: users.map((user: any) => ({
         kdcaId: user.kdcaId,
         displayName: user.displayName || `${user.firstName} ${user.lastName || ''}`.trim(),
         photoUrl: user.profile?.photoUrl,
@@ -237,7 +237,7 @@ export class UsersService {
     ]);
 
     return {
-      data: users.map((user) => ({
+      data: users.map((user: any) => ({
         kdcaId: user.kdcaId,
         displayName: user.displayName || `${user.firstName} ${user.lastName || ''}`.trim(),
         photoUrl: user.profile?.photoUrl,

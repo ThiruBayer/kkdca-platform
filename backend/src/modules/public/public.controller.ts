@@ -29,7 +29,7 @@ export class PublicController {
       where: { isPublic: true },
     });
 
-    return settings.reduce((acc, setting) => {
+    return settings.reduce((acc: Record<string, any>, setting: any) => {
       acc[setting.key] = setting.value;
       return acc;
     }, {} as Record<string, any>);
