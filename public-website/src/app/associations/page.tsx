@@ -4,10 +4,16 @@ import { useQuery } from '@tanstack/react-query';
 import { MapPin, Users, Phone, Crown, Award } from 'lucide-react';
 import Image from 'next/image';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.kallaichess.com/v1';
+
 const fetchTaluks = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/public/taluks`);
-  if (!response.ok) throw new Error('Failed to fetch taluks');
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/public/taluks`);
+    if (!response.ok) return [];
+    return response.json();
+  } catch {
+    return [];
+  }
 };
 
 interface Taluk {

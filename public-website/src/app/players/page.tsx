@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Users, MapPin, Filter } from 'lucide-react';
-import Link from 'next/link';
+import { Search, Users, MapPin } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.kallaichess.com/v1';
 
@@ -43,7 +42,6 @@ export default function PlayersPage() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<{ totalPlayers: number; totalTaluks: number }>({ totalPlayers: 0, totalTaluks: 0 });
 
-  // Fetch taluks
   useEffect(() => {
     fetch(`${API_URL}/public/taluks`)
       .then((r) => r.json())
@@ -59,7 +57,6 @@ export default function PlayersPage() {
       .catch(() => {});
   }, []);
 
-  // Fetch players
   useEffect(() => {
     setLoading(true);
     const params = new URLSearchParams();
@@ -89,208 +86,187 @@ export default function PlayersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">KKDCA Registered Players</h1>
-            <p className="text-primary-100 text-lg mb-8">
-              Search and find chess players across Kallakurichi District
-            </p>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                  placeholder="Search by Name, KKDCA ID, FIDE ID, AICF ID, TNSCA ID..."
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-white text-gray-900 shadow-lg text-base focus:ring-4 focus:ring-primary-300 focus:outline-none"
-                />
+    <div className="min-h-screen bg-gray-50 pt-[68px]">
+      {/* Compact Dashboard Bar */}
+      <div className="bg-gradient-to-r from-teal-700 to-teal-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-amber-400" />
+              <h1 className="text-lg font-bold">KKDCA Players</h1>
+            </div>
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5">
+                <span className="font-bold text-amber-300">{stats.totalPlayers}</span>
+                <span className="text-teal-200">Registered</span>
               </div>
-            </form>
-          </div>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-3xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <p className="text-3xl font-bold">{stats.totalPlayers}</p>
-              <p className="text-primary-200 text-sm">Total Players</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <p className="text-3xl font-bold">{stats.totalTaluks}</p>
-              <p className="text-primary-200 text-sm">Taluks</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <p className="text-3xl font-bold">{totalPlayers}</p>
-              <p className="text-primary-200 text-sm">Search Results</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-              <p className="text-3xl font-bold">{taluks.length}</p>
-              <p className="text-primary-200 text-sm">Active Taluks</p>
+              {taluks.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => { setSelectedTaluk(selectedTaluk === t.code ? '' : t.code); setPage(1); }}
+                  className={`hidden md:flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-colors ${
+                    selectedTaluk === t.code
+                      ? 'bg-amber-400 text-gray-900'
+                      : 'bg-white/10 text-teal-100 hover:bg-white/20'
+                  }`}
+                >
+                  {t.name}
+                  {t._count?.users != null && (
+                    <span className={`ml-0.5 font-bold ${selectedTaluk === t.code ? 'text-gray-800' : 'text-amber-300'}`}>
+                      {t._count.users}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-
-          {/* Sidebar - Taluk Filter */}
-          <div className="lg:w-72 shrink-0">
-            <div className="bg-white rounded-xl border shadow-sm p-5 sticky top-24">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-primary-600" />
-                Filter by Taluk
-              </h3>
-              <button
-                onClick={() => { setSelectedTaluk(''); setPage(1); }}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium mb-1 transition-colors ${
-                  !selectedTaluk ? 'bg-primary-600 text-white' : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                All Taluks
-              </button>
+      {/* Search + Filter Bar */}
+      <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <form onSubmit={handleSearch} className="flex-1 min-w-[200px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+                  placeholder="Search by name, KKDCA ID, FIDE ID, AICF ID, TNSCA ID..."
+                  className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
+                />
+              </div>
+            </form>
+            {/* Mobile taluk filter */}
+            <select
+              value={selectedTaluk}
+              onChange={(e) => { setSelectedTaluk(e.target.value); setPage(1); }}
+              className="md:hidden border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-teal-500"
+            >
+              <option value="">All Taluks</option>
               {taluks.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => { setSelectedTaluk(t.code); setPage(1); }}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium mb-1 transition-colors flex items-center justify-between ${
-                    selectedTaluk === t.code ? 'bg-primary-600 text-white' : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  <span>{t.name}</span>
-                </button>
+                <option key={t.id} value={t.code}>{t.name}</option>
               ))}
+            </select>
+            <div className="text-sm text-gray-500">
+              {totalPlayers} player{totalPlayers !== 1 ? 's' : ''} found
+              {selectedTaluk && ` in ${taluks.find((t) => t.code === selectedTaluk)?.name || selectedTaluk}`}
             </div>
-          </div>
-
-          {/* Main Content - Player List */}
-          <div className="flex-1">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-gray-600">
-                {totalPlayers} player{totalPlayers !== 1 ? 's' : ''} found
-                {selectedTaluk && ` in ${taluks.find((t) => t.code === selectedTaluk)?.name || selectedTaluk}`}
-              </p>
-            </div>
-
-            {loading ? (
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-xl border p-4 animate-pulse">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-gray-200 rounded w-40" />
-                        <div className="h-3 bg-gray-200 rounded w-24" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : players.length === 0 ? (
-              <div className="bg-white rounded-xl border p-12 text-center">
-                <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 text-lg">No players found</p>
-                <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filter</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {players.map((player) => (
-                  <div key={player.id} className="bg-white rounded-xl border hover:shadow-md transition-shadow p-4">
-                    <div className="flex items-center gap-4">
-                      {/* Avatar */}
-                      <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center shrink-0">
-                        {player.profile?.photoUrl ? (
-                          <img src={player.profile.photoUrl} alt="" className="w-12 h-12 rounded-full object-cover" />
-                        ) : (
-                          <span className="text-primary-700 font-bold text-lg">
-                            {player.firstName.charAt(0)}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="font-semibold text-gray-900">
-                            {player.firstName} {player.lastName || ''}
-                          </h3>
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                            player.status === 'ACTIVE'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}>
-                            {player.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-500 mt-0.5 flex-wrap">
-                          {player.kdcaId && <span className="font-medium text-primary-600">{player.kdcaId}</span>}
-                          {player.taluk && (
-                            <span className="flex items-center gap-1">
-                              <MapPin className="w-3 h-3" /> {player.taluk.name}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* IDs & Ratings */}
-                      <div className="hidden md:flex items-center gap-4 text-sm">
-                        {player.profile?.fideId && (
-                          <div className="text-center">
-                            <p className="text-xs text-gray-400">FIDE</p>
-                            <p className="font-medium text-gray-700">{player.profile.fideId}</p>
-                            {player.profile.fideRatingStd && (
-                              <p className="text-xs text-primary-600">{player.profile.fideRatingStd}</p>
-                            )}
-                          </div>
-                        )}
-                        {player.profile?.aicfId && (
-                          <div className="text-center">
-                            <p className="text-xs text-gray-400">AICF</p>
-                            <p className="font-medium text-gray-700">{player.profile.aicfId}</p>
-                          </div>
-                        )}
-                        {player.profile?.tncaId && (
-                          <div className="text-center">
-                            <p className="text-xs text-gray-400">TNSCA</p>
-                            <p className="font-medium text-gray-700">{player.profile.tncaId}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
-                <button
-                  onClick={() => setPage(Math.max(1, page - 1))}
-                  disabled={page === 1}
-                  className="px-4 py-2 border rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
-                >
-                  Previous
-                </button>
-                <span className="text-sm text-gray-600">
-                  Page {page} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setPage(Math.min(totalPages, page + 1))}
-                  disabled={page === totalPages}
-                  className="px-4 py-2 border rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
-                >
-                  Next
-                </button>
-              </div>
-            )}
           </div>
         </div>
+      </div>
+
+      {/* Player List */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {loading ? (
+          <div className="space-y-3">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border p-4 animate-pulse">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-gray-200 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-40" />
+                    <div className="h-3 bg-gray-200 rounded w-24" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : players.length === 0 ? (
+          <div className="bg-white rounded-xl border p-12 text-center">
+            <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500 text-lg">No players found</p>
+            <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filter</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {players.map((player) => (
+              <div key={player.id} className="bg-white rounded-xl border hover:shadow-md transition-shadow p-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center shrink-0">
+                    {player.profile?.photoUrl ? (
+                      <img src={player.profile.photoUrl} alt="" className="w-10 h-10 rounded-full object-cover" />
+                    ) : (
+                      <span className="text-teal-700 font-bold text-sm">
+                        {player.firstName.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-gray-900 text-sm">
+                        {player.firstName} {player.lastName || ''}
+                      </h3>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                        player.status === 'ACTIVE'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {player.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5 flex-wrap">
+                      {player.kdcaId && <span className="font-medium text-teal-600">{player.kdcaId}</span>}
+                      {player.taluk && (
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3" /> {player.taluk.name}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="hidden md:flex items-center gap-4 text-sm">
+                    {player.profile?.fideId && (
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400">FIDE</p>
+                        <p className="font-medium text-gray-700 text-xs">{player.profile.fideId}</p>
+                        {player.profile.fideRatingStd && (
+                          <p className="text-[10px] text-teal-600">{player.profile.fideRatingStd}</p>
+                        )}
+                      </div>
+                    )}
+                    {player.profile?.aicfId && (
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400">AICF</p>
+                        <p className="font-medium text-gray-700 text-xs">{player.profile.aicfId}</p>
+                      </div>
+                    )}
+                    {player.profile?.tncaId && (
+                      <div className="text-center">
+                        <p className="text-[10px] text-gray-400">TNSCA</p>
+                        <p className="font-medium text-gray-700 text-xs">{player.profile.tncaId}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            <button
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+              className="px-4 py-2 border rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              disabled={page === totalPages}
+              className="px-4 py-2 border rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
