@@ -3,6 +3,7 @@ import './globals.css';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Providers } from '@/components/providers';
+import { CustomCursor } from '@/components/custom-cursor';
 
 export const metadata: Metadata = {
   title: 'Kallakurichi District Chess Association | KDCA',
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans">
         <Providers>
+          <CustomCursor />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />

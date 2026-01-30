@@ -70,3 +70,56 @@ html {
 .animate-border-glow {
   animation: borderGlow 4s ease-in-out infinite;
 }
+
+/* Custom Cursor - Desktop only */
+@media (min-width: 1025px) {
+  * {
+    cursor: none !important;
+  }
+}
+
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background-color: #D4AF37;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+}
+
+.cursor-dot.cursor-hover {
+  width: 12px;
+  height: 12px;
+  background-color: #FF6B35;
+}
+
+.cursor-outline {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #D4AF37;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+.cursor-outline.cursor-hover {
+  width: 60px;
+  height: 60px;
+  border-color: #FF6B35;
+}
+
+/* Hide custom cursor on mobile */
+@media (max-width: 1024px) {
+  .cursor-dot,
+  .cursor-outline {
+    display: none !important;
+  }
+}
