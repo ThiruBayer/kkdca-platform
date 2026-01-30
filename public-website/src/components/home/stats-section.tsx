@@ -27,7 +27,7 @@ export function StatsSection() {
     { label: 'Registered Players', value: stats.totalPlayers, icon: Users, iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600', shadow: 'shadow-blue-500/30' },
     { label: 'Tournaments Hosted', value: stats.totalTournaments, icon: Trophy, iconBg: 'bg-gradient-to-br from-yellow-500 to-orange-500', shadow: 'shadow-orange-500/30' },
     { label: 'Chess Academies', value: stats.totalAcademies, icon: Building2, iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-600', shadow: 'shadow-emerald-500/30' },
-    { label: 'Taluk Associations', value: stats.totalTaluks, icon: MapPin, iconBg: 'bg-gradient-to-br from-pink-500 to-purple-600', shadow: 'shadow-pink-500/30' },
+    { label: 'Taluk Associations', value: stats.totalTaluks, icon: MapPin, iconBg: 'bg-gradient-to-br from-primary-500 to-primary-700', shadow: 'shadow-primary-500/30' },
   ];
 
   return (

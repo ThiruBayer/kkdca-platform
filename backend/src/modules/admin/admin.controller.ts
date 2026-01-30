@@ -96,6 +96,15 @@ export class AdminController {
     return this.adminService.approveTournament(tournamentId, adminId);
   }
 
+  @Patch('tournaments/:id/reject')
+  @ApiOperation({ summary: 'Reject tournament' })
+  async rejectTournament(
+    @Param('id') tournamentId: string,
+    @Body('reason') reason: string,
+  ) {
+    return this.adminService.rejectTournament(tournamentId, reason);
+  }
+
   @Get('settings')
   @ApiOperation({ summary: 'Get all settings' })
   async getSettings() {

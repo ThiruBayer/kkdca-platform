@@ -38,10 +38,10 @@ function AdminDashboard() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard title="Total Players" value={stats.totalUsers} icon={Users} trend="+12%" trendUp={true} />
-        <StatsCard title="Active Members" value={stats.activeMembers} icon={Users} trend="+8%" trendUp={true} />
+        <StatsCard title="Total Players" value={stats.totalUsers} icon={Users} />
+        <StatsCard title="Active Members" value={stats.activeMembers} icon={Users} />
         <StatsCard title="Pending Approvals" value={stats.pendingApprovals} icon={Building2} color="warning" />
-        <StatsCard title="This Month Revenue" value={`₹${stats.totalRevenue?.toLocaleString() || 0}`} icon={CreditCard} trend="+25%" trendUp={true} color="success" />
+        <StatsCard title="This Month Revenue" value={`₹${stats.totalRevenue?.toLocaleString() || 0}`} icon={CreditCard} color="success" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

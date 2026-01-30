@@ -23,7 +23,7 @@ interface NewsItem {
 }
 
 const newsColors = [
-  { badge: 'bg-purple-50 text-purple-700 border border-purple-200', placeholder: 'from-purple-400 to-pink-500' },
+  { badge: 'bg-primary-50 text-primary-700 border border-primary-200', placeholder: 'from-primary-400 to-primary-600' },
   { badge: 'bg-blue-50 text-blue-700 border border-blue-200', placeholder: 'from-blue-400 to-indigo-500' },
   { badge: 'bg-orange-50 text-orange-700 border border-orange-200', placeholder: 'from-orange-400 to-red-500' },
 ];
@@ -49,7 +49,7 @@ export function NewsSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-12">
           <div>
-            <span className="inline-flex items-center gap-2 text-pink-600 font-semibold mb-3 bg-pink-50 px-4 py-1.5 rounded-full text-sm border border-pink-200">
+            <span className="inline-flex items-center gap-2 text-primary-600 font-semibold mb-3 bg-primary-50 px-4 py-1.5 rounded-full text-sm border border-primary-200">
               Updates
             </span>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -61,7 +61,7 @@ export function NewsSection() {
           </div>
           <Link
             href="/news"
-            className="hidden sm:flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+            className="hidden sm:flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
           >
             View all news
             <ArrowRight className="w-4 h-4" />
@@ -75,8 +75,8 @@ export function NewsSection() {
             ))}
           </div>
         ) : news.length === 0 ? (
-          <div className="text-center py-16 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-dashed border-purple-200">
-            <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="text-center py-16 bg-gradient-to-br from-primary-50 to-cyan-50 rounded-2xl border-2 border-dashed border-primary-200">
+            <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Newspaper className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -122,7 +122,7 @@ export function NewsSection() {
                         {formatDate(item.publishedAt)}
                       </span>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors line-clamp-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {item.title}
                     </h3>
                     <p className="text-gray-600 text-sm line-clamp-2">
@@ -137,7 +137,7 @@ export function NewsSection() {
 
         <Link
           href="/news"
-          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
         >
           View all news
           <ArrowRight className="w-4 h-4" />

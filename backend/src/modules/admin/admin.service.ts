@@ -160,6 +160,16 @@ export class AdminService {
     });
   }
 
+  async rejectTournament(tournamentId: string, reason: string) {
+    return this.prisma.tournament.update({
+      where: { id: tournamentId },
+      data: {
+        status: TournamentStatus.CANCELLED,
+        rejectionReason: reason,
+      },
+    });
+  }
+
   async getAllPayments(params: {
     search?: string;
     status?: string;
