@@ -24,7 +24,7 @@ export class PaymentsService {
       throw new NotFoundException('User not found');
     }
 
-    const amount = user.role === 'ARBITER' ? 250 : 75;
+    const amount = user.role === 'ARBITER' ? 10 : 10; // TODO: Change back to 250:75 after HDFC QA sign-off
     const orderId = `KKDCA_REG_${Date.now()}_${uuidv4().slice(0, 8).toUpperCase()}`;
 
     const payment = await this.prisma.payment.create({
@@ -84,7 +84,7 @@ export class PaymentsService {
       throw new NotFoundException('User not found');
     }
 
-    const amount = user.role === 'ARBITER' ? 250 : 75;
+    const amount = user.role === 'ARBITER' ? 10 : 10; // TODO: Change back to 250:75 after HDFC QA sign-off
     const orderId = `KKDCA_MEM_${Date.now()}_${uuidv4().slice(0, 8).toUpperCase()}`;
 
     const payment = await this.prisma.payment.create({
