@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as https from 'https';
 import * as crypto from 'crypto';
+import * as dns from 'dns';
 
 export interface JuspaySessionResponse {
   status: string;
@@ -216,100 +216,79 @@ export class JuspayService {
   }
 
   /**
-   * Core HTTP call - matches official HDFC PaymentHandler.makeServiceCall
+   * Core HTTP call using fetch - force IPv4 to avoid Cloudflare blocking datacenter IPv6
    */
-  private makeServiceCall<T>(options: {
+  private async makeServiceCall<T>(options: {
     method: string;
     path: string;
     body?: Record<string, any>;
     contentType?: string;
     extraHeaders?: Record<string, string>;
   }): Promise<T> {
-    return new Promise((resolve, reject) => {
-      const headers: Record<string, string> = {
-        'Content-Type': options.contentType || 'application/x-www-form-urlencoded',
-        'User-Agent': 'NODEJS_KIT/1.0.0',
-        'version': '2023-06-30',
-        'x-merchantid': this.merchantId,
-        'Authorization': this.getAuthHeader(),
-        ...(options.extraHeaders || {}),
-      };
+    // Force IPv4 DNS resolution to avoid Cloudflare blocking datacenter IPv6
+    dns.setDefaultResultOrder('ipv4first');
 
-      let payload = '';
-      if (options.body) {
-        if (headers['Content-Type'] === 'application/json') {
-          payload = JSON.stringify(options.body);
-        } else {
-          payload = Object.keys(options.body)
-            .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(options.body![key])}`)
-            .join('&');
-        }
+    const fullUrl = new URL(options.path, this.apiBaseUrl);
+
+    const headers: Record<string, string> = {
+      'Content-Type': options.contentType || 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'version': '2023-06-30',
+      'x-merchantid': this.merchantId,
+      'Authorization': this.getAuthHeader(),
+      ...(options.extraHeaders || {}),
+    };
+
+    let bodyPayload: string | undefined;
+    if (options.body) {
+      if ((headers['Content-Type'] || '').includes('json')) {
+        bodyPayload = JSON.stringify(options.body);
+      } else {
+        bodyPayload = Object.keys(options.body)
+          .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(options.body![key])}`)
+          .join('&');
+      }
+    }
+
+    this.logger.log(`HDFC API: ${options.method} ${fullUrl.toString()}`);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 100000);
+
+    try {
+      const response = await fetch(fullUrl.toString(), {
+        method: options.method,
+        headers,
+        body: bodyPayload || (options.method === 'POST' ? '' : undefined),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      const responseText = await response.text();
+      this.logger.log(`HDFC API response: ${response.status} - ${responseText.substring(0, 300)}`);
+
+      let resJson: any;
+      try {
+        resJson = JSON.parse(responseText);
+      } catch {
+        this.logger.error(`HDFC API invalid JSON (Cloudflare block?): ${responseText.substring(0, 500)}`);
+        throw new Error('Invalid response from HDFC gateway - possible Cloudflare block');
       }
 
-      const fullUrl = new URL(options.path, this.apiBaseUrl);
-      const agent = new https.Agent({ keepAlive: true });
-
-      const httpOptions = {
-        host: fullUrl.host,
-        port: fullUrl.port || undefined,
-        path: fullUrl.pathname + fullUrl.search,
-        method: options.method,
-        agent,
-        headers,
-      };
-
-      this.logger.debug(`HDFC API: ${options.method} ${fullUrl.pathname}`);
-
-      const req = https.request(httpOptions);
-
-      req.setTimeout(100000, () => {
-        req.destroy(new Error('HDFC API request timeout'));
-      });
-
-      req.on('response', (res) => {
-        res.setEncoding('utf-8');
-        let responseBody = '';
-        res.on('data', (chunk: string) => {
-          responseBody += chunk;
-        });
-
-        res.once('end', () => {
-          this.logger.debug(`HDFC API response: ${res.statusCode} - ${responseBody.substring(0, 200)}`);
-
-          let resJson: any;
-          try {
-            resJson = JSON.parse(responseBody);
-          } catch {
-            this.logger.error(`HDFC API invalid JSON response: ${responseBody.substring(0, 500)}`);
-            return reject(new Error(`Invalid response from HDFC gateway`));
-          }
-
-          if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-            return resolve(resJson as T);
-          } else {
-            const errorMsg = resJson.error_message || resJson.message || `HTTP ${res.statusCode}`;
-            this.logger.error(`HDFC API error: ${res.statusCode} - ${errorMsg}`);
-            return reject(new Error(`HDFC gateway error: ${errorMsg}`));
-          }
-        });
-      });
-
-      req.once('socket', (socket: any) => {
-        if (socket.connecting) {
-          socket.once('secureConnect', () => {
-            req.write(payload);
-            req.end();
-          });
-        } else {
-          req.write(payload);
-          req.end();
-        }
-      });
-
-      req.on('error', (error: Error) => {
-        this.logger.error(`HDFC API connection error: ${error.message}`);
-        return reject(error);
-      });
-    });
+      if (response.ok) {
+        return resJson as T;
+      } else {
+        const errorMsg = resJson.error_message || resJson.message || `HTTP ${response.status}`;
+        this.logger.error(`HDFC API error: ${response.status} - ${errorMsg}`);
+        throw new Error(`HDFC gateway error: ${errorMsg}`);
+      }
+    } catch (error: any) {
+      clearTimeout(timeout);
+      if (error.name === 'AbortError') {
+        throw new Error('HDFC API request timeout');
+      }
+      throw error;
+    }
   }
 }
