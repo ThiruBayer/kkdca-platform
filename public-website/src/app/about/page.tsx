@@ -35,7 +35,7 @@ const achievements = [
   {
     icon: BookOpen,
     title: '450+ Chess Boards Donated',
-    description: 'Over 450 chess boards donated to government schools in collaboration with Corona Academy and Eye Tex company.',
+    description: 'Over 450 chess boards donated to government schools in collaboration with Drona Academy of Sports and Skills and Eye Tex company.',
   },
   {
     icon: Users,

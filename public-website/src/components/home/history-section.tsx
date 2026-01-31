@@ -38,7 +38,7 @@ const milestones = [
     year: '',
     title: 'Government School Support',
     description:
-      'In collaboration with Corona Academy and Eye Tex company, KKDCA provided chessboards to 450 government schools across the district.',
+      'In collaboration with Drona Academy of Sports and Skills and Eye Tex company, KKDCA provided chessboards to 450 government schools across the district.',
   },
   {
     year: '',
