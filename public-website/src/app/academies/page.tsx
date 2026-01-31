@@ -58,7 +58,7 @@ const HARDCODED_ACADEMIES: HardcodedAcademy[] = [
     contactEmail: 'ravichess@gmail.com',
     location: '24C, Anna Nagar, Kallakurichi',
     isVerified: true,
-    approvedBy: 'Kallai Chess Academy',
+    approvedBy: 'KKDCA',
   },
   {
     id: 'master-brain-chess-academy',
@@ -67,7 +67,7 @@ const HARDCODED_ACADEMIES: HardcodedAcademy[] = [
     founder: 'Mr. Nagaraj K',
     founderTitle: 'TN State Arbiter, School Instructor',
     description:
-      'Approved by Kallai Chess Academy, Master Brain Chess Academy was founded on 1st February 2024 by Mr. Nagaraj K. The academy offers multiple training modes including offline, online, and one-on-one coaching with dedicated facilities for game practice and engine analysis.',
+      'Approved by KKDCA, Master Brain Chess Academy was founded on 1st February 2024 by Mr. Nagaraj K. The academy offers multiple training modes including offline, online, and one-on-one coaching with dedicated facilities for game practice and engine analysis.',
     logo: '/images/academies/Master Brain Chess Academy logo.avif',
     coachPhoto: '/images/academies/Master Brain Chess Academy Coach.avif',
     trainingModes: ['Offline Classes', 'One-on-One', 'Online Classes', 'Open Classroom'],
@@ -77,7 +77,7 @@ const HARDCODED_ACADEMIES: HardcodedAcademy[] = [
       'Chess engine practice',
       'Interactive online classes',
     ],
-    approvedBy: 'Kallai Chess Academy',
+    approvedBy: 'KKDCA',
     contactName: 'Mr. Nagaraj K',
     contactPhone: '8760289729',
     contactEmail: 'masterbrainchess@gmail.com',
