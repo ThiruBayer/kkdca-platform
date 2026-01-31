@@ -188,7 +188,7 @@ export class PaymentsService {
 
     try {
       const orderStatus = await this.juspayService.getOrderStatus(orderId);
-      isSuccess = this.juspayService.isPaymentSuccess(orderStatus.status_id);
+      isSuccess = this.juspayService.isPaymentSuccess(orderStatus.status || orderStatus.status_id);
       gatewayPaymentId = orderStatus.txn_id;
 
       // Store full gateway response
