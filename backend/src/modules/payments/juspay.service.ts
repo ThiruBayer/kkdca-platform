@@ -39,7 +39,7 @@ export class JuspayService {
       'HDFC_BASE_URL',
       this.configService.get<string>(
         'JUSPAY_API_BASE_URL',
-        'https://smartgateway.hdfc.bank.in',
+        'https://smartgateway.hdfcuat.bank.in',
       ),
     );
     this.apiKey = this.configService.get<string>(
@@ -61,7 +61,7 @@ export class JuspayService {
   }
 
   private getAuthHeader(): string {
-    return 'Basic ' + Buffer.from(this.apiKey).toString('base64');
+    return 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
   }
 
   /**
@@ -100,6 +100,9 @@ export class JuspayService {
       path: '/session',
       body,
       contentType: 'application/json',
+      extraHeaders: {
+        'x-customerid': params.customerId,
+      },
     });
 
     this.logger.log(`HDFC session created for order: ${params.orderId}, payment_link: ${data.payment_links?.web ? 'yes' : 'no'}`);
@@ -107,13 +110,13 @@ export class JuspayService {
   }
 
   /**
-   * Get order status - matches official HDFC NodejsBackendKit GET /orders/:orderId
+   * Get order status - uses POST as per HDFC API docs
    */
   async getOrderStatus(orderId: string): Promise<JuspayOrderStatusResponse> {
     this.logger.log(`Fetching order status for: ${orderId}`);
 
     const data = await this.makeServiceCall<JuspayOrderStatusResponse>({
-      method: 'GET',
+      method: 'POST',
       path: `/orders/${orderId}`,
     });
 
@@ -220,14 +223,16 @@ export class JuspayService {
     path: string;
     body?: Record<string, any>;
     contentType?: string;
+    extraHeaders?: Record<string, string>;
   }): Promise<T> {
     return new Promise((resolve, reject) => {
       const headers: Record<string, string> = {
         'Content-Type': options.contentType || 'application/x-www-form-urlencoded',
         'User-Agent': 'NODEJS_KIT/1.0.0',
-        'version': '2024-06-24',
+        'version': '2023-06-30',
         'x-merchantid': this.merchantId,
         'Authorization': this.getAuthHeader(),
+        ...(options.extraHeaders || {}),
       };
 
       let payload = '';
