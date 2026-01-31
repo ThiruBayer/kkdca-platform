@@ -25,6 +25,7 @@ const talukColors = [
   'from-primary-500 to-primary-600',
   'from-primary-600 to-primary-700',
   'from-orange-500 to-red-500',
+  'from-pink-500 to-rose-600',
 ];
 
 export function AssociationsSection() {
@@ -54,7 +55,7 @@ export function AssociationsSection() {
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Taluk Chess Associations</h2>
             <p className="text-gray-300 max-w-2xl mx-auto">
-              KKDCA operates through 6 taluk associations, each promoting chess
+              KKDCA operates through 7 taluk associations, each promoting chess
               at the local level and identifying talented players.
             </p>
           </motion.div>

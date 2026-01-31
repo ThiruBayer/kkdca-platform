@@ -29,6 +29,7 @@ export default function RegisterPage() {
     'ULP': '606107',
     'TKR': '605757',
     'KVH': '606303',
+    'VPM': '606213',
   };
   const [loginEnabled, setLoginEnabled] = useState(false);
 

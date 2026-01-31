@@ -32,7 +32,7 @@ const features = [
   {
     icon: Users,
     title: 'Community',
-    description: 'Building a vibrant chess community across all 6 taluks with active associations and training academies.',
+    description: 'Building a vibrant chess community across all 7 taluks with active associations and training academies.',
     gradient: 'from-emerald-500 to-teal-600',
     bg: 'bg-gradient-to-br from-emerald-50 to-teal-50',
     border: 'border-emerald-200',

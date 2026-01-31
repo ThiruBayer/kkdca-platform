@@ -13,6 +13,7 @@ async function main() {
     { code: 'ULP', name: 'Ulundurpet', nameTamil: 'உளுந்தூர்பேட்டை', sortOrder: 4 },
     { code: 'TKR', name: 'Thirukovilur', nameTamil: 'திருக்கோவிலூர்', sortOrder: 5 },
     { code: 'KVH', name: 'Kalvarayan Hills', nameTamil: 'கல்வராயன் மலை', sortOrder: 6 },
+    { code: 'VPM', name: 'Vanapuram', nameTamil: 'வானபுரம்', sortOrder: 7 },
     { code: 'EXT', name: 'External', nameTamil: 'வெளியூர்', sortOrder: 99 },
   ];
 

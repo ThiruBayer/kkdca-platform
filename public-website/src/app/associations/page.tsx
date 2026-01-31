@@ -190,6 +190,16 @@ const associations: AssociationInfo[] = [
     jointSecretaries: [],
     executiveMembers: [],
   },
+  {
+    name: 'Vanapuram',
+    nameTamil: 'வானபுரம்',
+    code: 'VPM',
+    hasData: false,
+    bearers: [],
+    vicePresidents: [],
+    jointSecretaries: [],
+    executiveMembers: [],
+  },
 ];
 
 function BearerCard({ bearer }: { bearer: OfficeBearer }) {
@@ -318,7 +328,7 @@ export default function AssociationsPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Taluk Chess Associations</h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              KKDCA operates through 6 taluk-level chess associations that promote chess at the grassroots level across Kallakurichi district.
+              KKDCA operates through 7 taluk-level chess associations that promote chess at the grassroots level across Kallakurichi district.
             </p>
           </div>
         </div>
@@ -333,7 +343,7 @@ export default function AssociationsPage() {
             </p>
             <div className="grid grid-cols-3 gap-6 p-6 bg-teal-50 rounded-xl border border-teal-100">
               <div className="text-center">
-                <div className="text-3xl font-bold text-teal-700">6</div>
+                <div className="text-3xl font-bold text-teal-700">7</div>
                 <div className="text-sm text-gray-600">Taluk Associations</div>
               </div>
               <div className="text-center">
