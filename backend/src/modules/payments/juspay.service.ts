@@ -61,7 +61,7 @@ export class JuspayService {
   }
 
   private getAuthHeader(): string {
-    return 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
+    return 'Basic ' + Buffer.from(this.apiKey).toString('base64');
   }
 
   /**
@@ -110,13 +110,13 @@ export class JuspayService {
   }
 
   /**
-   * Get order status - uses POST as per HDFC API docs
+   * Get order status - uses GET as per official HDFC NodejsBackendKit
    */
   async getOrderStatus(orderId: string): Promise<JuspayOrderStatusResponse> {
     this.logger.log(`Fetching order status for: ${orderId}`);
 
     const data = await this.makeServiceCall<JuspayOrderStatusResponse>({
-      method: 'POST',
+      method: 'GET',
       path: `/orders/${orderId}`,
     });
 
@@ -233,7 +233,7 @@ export class JuspayService {
     const headers: Record<string, string> = {
       'Content-Type': options.contentType || 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'version': '2023-06-30',
+      'version': '2024-06-24',
       'x-merchantid': this.merchantId,
       'Authorization': this.getAuthHeader(),
       ...(options.extraHeaders || {}),
