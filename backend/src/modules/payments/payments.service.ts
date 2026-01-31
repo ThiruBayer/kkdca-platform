@@ -39,7 +39,7 @@ export class PaymentsService {
     });
 
     const adminUrl = this.configService.get<string>('ADMIN_URL', 'https://register.kallaichess.com');
-    const returnUrl = `${adminUrl}/register/payment-status?order_id=${orderId}`;
+    const returnUrl = `${adminUrl}/payment-status?order_id=${orderId}`;
 
     try {
       const session = await this.juspayService.createSession({
