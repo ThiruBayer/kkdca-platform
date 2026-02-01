@@ -9,7 +9,15 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
-  { name: 'Players', href: '/players' },
+  {
+    name: 'Players',
+    href: '#',
+    children: [
+      { name: 'KKDCA Players', href: '/players' },
+      { name: 'Update ID', href: '/players/update-id' },
+      { name: 'Laws of Chess', href: '/images/downloads/LawsOfChess.pdf' },
+    ],
+  },
   { name: 'Tournaments', href: '/tournaments' },
   {
     name: 'Organizations',
@@ -23,7 +31,6 @@ const navigation = [
     name: 'Resources',
     href: '#',
     children: [
-      { name: 'Laws of Chess', href: '/images/downloads/LawsOfChess.pdf' },
       { name: 'District Tournament Bid Form', href: '/images/downloads/District Tournament Bidform.pdf' },
       { name: 'State Tournament Bid Form', href: '/images/downloads/State Tournament Bidform.pdf' },
       { name: 'TNSCA', href: 'https://www.tnsca.in' },

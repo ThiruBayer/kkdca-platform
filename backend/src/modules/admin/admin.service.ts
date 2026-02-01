@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserStatus, UserRole, OrganizationStatus, TournamentStatus } from '@prisma/client';
 
@@ -308,5 +308,105 @@ export class AdminService {
       data: logs,
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     };
+  }
+
+  async getIdUpdateRequests(params: { status?: string; page?: number; limit?: number }) {
+    const { status, page = 1, limit = 20 } = params;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (status) where.status = status;
+
+    const [requests, total] = await Promise.all([
+      this.prisma.idUpdateRequest.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              kdcaId: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+              profile: {
+                select: { fideId: true, aicfId: true, tncaId: true },
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.idUpdateRequest.count({ where }),
+    ]);
+
+    return {
+      data: requests,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+    };
+  }
+
+  async approveIdUpdateRequest(requestId: string, adminId: string) {
+    const request = await this.prisma.idUpdateRequest.findUnique({
+      where: { id: requestId },
+      include: { user: { include: { profile: true } } },
+    });
+
+    if (!request) throw new NotFoundException('Request not found');
+
+    // Update the player profile with the new IDs
+    const profileUpdate: any = {};
+    if (request.tncaId) profileUpdate.tncaId = request.tncaId;
+    if (request.aicfId) profileUpdate.aicfId = request.aicfId;
+    if (request.fideId) profileUpdate.fideId = request.fideId;
+
+    await this.prisma.$transaction([
+      // Update profile (create if not exists)
+      request.user.profile
+        ? this.prisma.playerProfile.update({
+            where: { userId: request.userId },
+            data: profileUpdate,
+          })
+        : this.prisma.playerProfile.create({
+            data: {
+              userId: request.userId,
+              dateOfBirth: new Date('2000-01-01'),
+              gender: 'MALE',
+              ...profileUpdate,
+            },
+          }),
+      // Mark request as approved
+      this.prisma.idUpdateRequest.update({
+        where: { id: requestId },
+        data: {
+          status: 'APPROVED',
+          reviewedBy: adminId,
+          reviewedAt: new Date(),
+        },
+      }),
+    ]);
+
+    return { success: true, message: 'ID update request approved and player profile updated' };
+  }
+
+  async rejectIdUpdateRequest(requestId: string, adminId: string, remarks: string) {
+    const request = await this.prisma.idUpdateRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) throw new NotFoundException('Request not found');
+
+    await this.prisma.idUpdateRequest.update({
+      where: { id: requestId },
+      data: {
+        status: 'REJECTED',
+        reviewedBy: adminId,
+        reviewedAt: new Date(),
+        adminRemarks: remarks,
+      },
+    });
+
+    return { success: true, message: 'ID update request rejected' };
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -93,11 +93,90 @@ export class PublicController {
   async submitContact(
     @Body() data: { name: string; email: string; subject: string; message: string },
   ) {
-    // In production, send email notification
-    // For now, just acknowledge receipt
     return {
       success: true,
       message: 'Your message has been received. We will get back to you soon.',
+    };
+  }
+
+  @Get('player-lookup/:kdcaId')
+  @ApiOperation({ summary: 'Look up player by KKDCA ID' })
+  async playerLookup(@Param('kdcaId') kdcaId: string) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        kdcaId: kdcaId.toUpperCase(),
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        kdcaId: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        taluk: { select: { name: true, code: true } },
+        profile: {
+          select: {
+            fideId: true,
+            aicfId: true,
+            tncaId: true,
+            fideRatingStd: true,
+            fideRatingRapid: true,
+            fideRatingBlitz: true,
+            aicfRating: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('No player found with this KKDCA ID');
+    }
+
+    return user;
+  }
+
+  @Post('id-update-request')
+  @ApiOperation({ summary: 'Submit ID update request' })
+  async submitIdUpdateRequest(
+    @Body() data: { kdcaId: string; tncaId?: string; aicfId?: string; fideId?: string },
+  ) {
+    if (!data.kdcaId) {
+      throw new BadRequestException('KKDCA ID is required');
+    }
+    if (!data.tncaId && !data.aicfId && !data.fideId) {
+      throw new BadRequestException('At least one ID (TNSCA, AICF, or FIDE) is required');
+    }
+
+    const user = await this.prisma.user.findFirst({
+      where: { kdcaId: data.kdcaId.toUpperCase(), deletedAt: null },
+    });
+
+    if (!user) {
+      throw new NotFoundException('No player found with this KKDCA ID');
+    }
+
+    // Check for existing pending request
+    const existing = await this.prisma.idUpdateRequest.findFirst({
+      where: { userId: user.id, status: 'PENDING' },
+    });
+
+    if (existing) {
+      throw new BadRequestException('You already have a pending ID update request. Please wait for admin approval.');
+    }
+
+    const request = await this.prisma.idUpdateRequest.create({
+      data: {
+        userId: user.id,
+        tncaId: data.tncaId || null,
+        aicfId: data.aicfId || null,
+        fideId: data.fideId || null,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'ID update request submitted successfully. Admin will review and approve shortly.',
+      requestId: request.id,
     };
   }
 }
