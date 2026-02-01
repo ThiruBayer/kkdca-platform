@@ -58,6 +58,7 @@ const HARDCODED_ACADEMIES: HardcodedAcademy[] = [
     contactEmail: 'ravichess@gmail.com',
     location: '24C, Anna Nagar, Kallakurichi',
     isVerified: true,
+    approvedBy: 'KKDCA',
   },
   {
     id: 'master-brain-chess-academy',

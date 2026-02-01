@@ -25,7 +25,7 @@ api.interceptors.response.use(
           const { state } = JSON.parse(stored);
           if (state.refreshToken) {
             const response = await axios.post(
-              `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+              `${process.env.NEXT_PUBLIC_API_URL || 'https://api.kallaichess.com/v1'}/auth/refresh`,
               { refreshToken: state.refreshToken }
             );
 

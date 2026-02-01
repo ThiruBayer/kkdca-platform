@@ -24,7 +24,7 @@ export class PaymentsService {
       throw new NotFoundException('User not found');
     }
 
-    const amount = user.role === 'ARBITER' ? 250 : 75;
+    const amount = user.role === 'ARBITER' ? 10 : 10; // TODO: Change back to 250:75 after HDFC QA sign-off
     const orderId = `KKDCA_REG_${Date.now()}_${uuidv4().slice(0, 8).toUpperCase()}`;
 
     const payment = await this.prisma.payment.create({
@@ -39,7 +39,7 @@ export class PaymentsService {
     });
 
     const adminUrl = this.configService.get<string>('ADMIN_URL', 'https://register.kallaichess.com');
-    const returnUrl = `${adminUrl}/register/payment-status?order_id=${orderId}`;
+    const returnUrl = `${adminUrl}/payment-status?order_id=${orderId}`;
 
     try {
       const session = await this.juspayService.createSession({
@@ -84,7 +84,7 @@ export class PaymentsService {
       throw new NotFoundException('User not found');
     }
 
-    const amount = user.role === 'ARBITER' ? 250 : 75;
+    const amount = user.role === 'ARBITER' ? 10 : 10; // TODO: Change back to 250:75 after HDFC QA sign-off
     const orderId = `KKDCA_MEM_${Date.now()}_${uuidv4().slice(0, 8).toUpperCase()}`;
 
     const payment = await this.prisma.payment.create({
@@ -188,7 +188,7 @@ export class PaymentsService {
 
     try {
       const orderStatus = await this.juspayService.getOrderStatus(orderId);
-      isSuccess = this.juspayService.isPaymentSuccess(orderStatus.status_id);
+      isSuccess = this.juspayService.isPaymentSuccess(orderStatus.status || orderStatus.status_id);
       gatewayPaymentId = orderStatus.txn_id;
 
       // Store full gateway response

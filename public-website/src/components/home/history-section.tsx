@@ -38,7 +38,7 @@ const milestones = [
     year: '',
     title: 'Government School Support',
     description:
-      'In collaboration with Corona Academy and Eye Tex company, KKDCA provided chessboards to 450 government schools across the district.',
+      'In collaboration with Drona Academy of Sports and Skills and Eye Tex company, KKDCA provided chessboards to 450 government schools across the district.',
   },
   {
     year: '',
@@ -124,11 +124,13 @@ export function HistorySection() {
           viewport={{ once: true, margin: '-60px' }}
           className="relative ml-4 border-l-2 border-teal-200 pl-8 sm:ml-8 sm:pl-10"
         >
-          {milestones.map((m, i) => (
+          {milestones.map((m, i) => {
+            const chessPieces = ['♟', '♞', '♝', '♜', '♛', '♚', '♟', '♞'];
+            return (
             <motion.div key={i} variants={itemVariants} className="relative mb-10 last:mb-0">
-              {/* Dot */}
-              <span className="absolute -left-[calc(2rem+5px)] top-1.5 flex h-3 w-3 items-center justify-center sm:-left-[calc(2.5rem+5px)]">
-                <span className="h-3 w-3 rounded-full bg-teal-500 ring-4 ring-teal-100" />
+              {/* Chess piece icon */}
+              <span className="absolute -left-[calc(2rem+9px)] top-0 flex h-5 w-5 items-center justify-center sm:-left-[calc(2.5rem+9px)]">
+                <span className="h-5 w-5 flex items-center justify-center rounded-full bg-teal-500 ring-4 ring-teal-100 text-white text-xs">{chessPieces[i]}</span>
               </span>
 
               {m.year && (
@@ -145,7 +147,8 @@ export function HistorySection() {
               <h3 className="mt-1 text-lg font-semibold text-gray-900">{m.title}</h3>
               <p className="mt-1 text-sm leading-relaxed text-gray-600">{m.description}</p>
             </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
 
         {/* Achievement Stats */}

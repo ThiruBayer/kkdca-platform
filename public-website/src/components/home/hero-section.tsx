@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Trophy, Users, Star, ChevronDown, Sparkles } from 'lucide-react';
 
+
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
@@ -32,7 +33,7 @@ export function HeroSection() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/20 to-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-teal-500/30">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              Established 2019 &bull; Affiliated with TNSCA &amp; AICF
+              Established 2019 &bull; Affiliated with TNSCA
             </div>
 
             {/* Heading */}
@@ -43,7 +44,7 @@ export function HeroSection() {
 
             {/* Subheading */}
             <p className="text-lg text-gray-300 max-w-xl mb-8 leading-relaxed">
-              Nurturing the next generation of chess champions across 6 taluks
+              Nurturing the next generation of chess champions across 7 taluks
               in Kallakurichi District, Tamil Nadu. Join us and be part of the chess revolution.
             </p>
 
@@ -83,13 +84,13 @@ export function HeroSection() {
                 <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-emerald-500/30 to-emerald-600/30 rounded-xl mb-2 mx-auto border border-emerald-500/20">
                   <Star className="w-5 h-5 text-emerald-400" />
                 </div>
-                <div className="text-2xl font-bold text-white">6</div>
+                <div className="text-2xl font-bold text-white">7</div>
                 <div className="text-xs text-gray-400">Taluk Associations</div>
               </div>
             </div>
           </motion.div>
 
-          {/* Right - Logo and images */}
+          {/* Right - Logo + Hero Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -97,7 +98,7 @@ export function HeroSection() {
             className="hidden lg:flex items-center justify-center"
           >
             <div className="relative">
-              {/* Main logo with teal border */}
+              {/* Main logo */}
               <div className="relative w-80 h-80 rounded-3xl overflow-hidden border-4 border-teal-400/40 shadow-2xl shadow-teal-500/20 animate-float">
                 <Image
                   src="/images/logo/KKDCA_LOGO.jpg"
@@ -105,6 +106,16 @@ export function HeroSection() {
                   fill
                   className="object-contain bg-white p-4"
                   priority
+                />
+              </div>
+
+              {/* Floating chess activity image */}
+              <div className="absolute -top-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-teal-400/40 shadow-xl shadow-teal-500/20">
+                <Image
+                  src="/images/gallery/chessboardsponsor_govtschool.jfif"
+                  alt="Chess in Schools"
+                  fill
+                  className="object-cover"
                 />
               </div>
 
@@ -118,11 +129,11 @@ export function HeroSection() {
                 />
               </div>
 
-              {/* Floating chess activity image */}
-              <div className="absolute -top-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-teal-400/40 shadow-xl shadow-teal-500/20">
+              {/* Hero image - small floating card */}
+              <div className="absolute -bottom-6 -right-10 w-36 h-28 rounded-xl overflow-hidden border-4 border-emerald-400/40 shadow-xl shadow-emerald-500/20">
                 <Image
-                  src="/images/gallery/chessboardsponsor_govtschool.jfif"
-                  alt="Chess in Schools"
+                  src="/images/hero.jfif"
+                  alt="Chess Champions - KKDCA"
                   fill
                   className="object-cover"
                 />

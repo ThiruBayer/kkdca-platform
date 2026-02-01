@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
+import { JuspayService } from './juspay.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
@@ -20,7 +21,10 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 export class PaymentsController {
   private readonly logger = new Logger(PaymentsController.name);
 
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private readonly juspayService: JuspayService,
+  ) {}
 
   @Post('registration')
   @ApiOperation({ summary: 'Initiate payment for new registration (public)' })
@@ -54,7 +58,7 @@ export class PaymentsController {
 
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Juspay webhook callback' })
+  @ApiOperation({ summary: 'HDFC payment webhook callback' })
   async handleWebhook(@Body() body: any) {
     this.logger.log(`Received webhook: ${JSON.stringify(body)}`);
     const orderId = body.order_id || body.content?.order?.order_id || body.orderId;
@@ -65,9 +69,21 @@ export class PaymentsController {
   }
 
   @Post('callback')
-  @ApiOperation({ summary: 'Payment gateway callback (legacy)' })
+  @ApiOperation({ summary: 'HDFC payment return URL callback' })
   async handleCallback(@Body() body: any) {
-    return this.paymentsService.handleCallback(body.orderId || body.order_id, body);
+    this.logger.log(`Received callback: ${JSON.stringify(body)}`);
+
+    // Validate HMAC signature from HDFC (as per official NodejsBackendKit)
+    if (body.signature && !this.juspayService.validateSignature(body)) {
+      this.logger.error('HDFC signature verification failed');
+      return { status: 'error', message: 'Signature verification failed' };
+    }
+
+    const orderId = body.order_id || body.orderId;
+    if (!orderId) {
+      return { status: 'error', message: 'No order_id found' };
+    }
+    return this.paymentsService.handleCallback(orderId, body);
   }
 
   @Get('verify/:orderId')

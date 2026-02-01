@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'KDCA Admin Portal',
+  title: 'KKDCA Admin Portal',
   description: 'Kallakurichi District Chess Association - Admin & Registration Portal',
 };
 

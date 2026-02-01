@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto';
+import * as dns from 'dns';
 
 export interface JuspaySessionResponse {
   status: string;
@@ -30,25 +32,41 @@ export class JuspayService {
   private readonly apiKey: string;
   private readonly merchantId: string;
   private readonly paymentPageClientId: string;
+  private readonly responseKey: string;
 
   constructor(private configService: ConfigService) {
     this.apiBaseUrl = this.configService.get<string>(
-      'JUSPAY_API_BASE_URL',
-      'https://smartgateway.hdfcbank.in',
+      'HDFC_BASE_URL',
+      this.configService.get<string>(
+        'JUSPAY_API_BASE_URL',
+        'https://smartgateway.hdfcuat.bank.in',
+      ),
     );
-    this.apiKey = this.configService.get<string>('JUSPAY_API_KEY', '');
-    this.merchantId = this.configService.get<string>('JUSPAY_MERCHANT_ID', '');
+    this.apiKey = this.configService.get<string>(
+      'HDFC_API_KEY',
+      this.configService.get<string>('JUSPAY_API_KEY', ''),
+    );
+    this.merchantId = this.configService.get<string>(
+      'HDFC_MERCHANT_ID',
+      this.configService.get<string>('JUSPAY_MERCHANT_ID', ''),
+    );
     this.paymentPageClientId = this.configService.get<string>(
-      'JUSPAY_PAYMENT_PAGE_CLIENT_ID',
-      'hdfcmaster',
+      'HDFC_PAYMENT_PAGE_CLIENT_ID',
+      this.configService.get<string>('JUSPAY_PAYMENT_PAGE_CLIENT_ID', ''),
+    );
+    this.responseKey = this.configService.get<string>(
+      'HDFC_RESPONSE_KEY',
+      this.configService.get<string>('JUSPAY_RESPONSE_KEY', ''),
     );
   }
 
   private getAuthHeader(): string {
-    const encoded = Buffer.from(`${this.apiKey}:`).toString('base64');
-    return `Basic ${encoded}`;
+    return 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
   }
 
+  /**
+   * Create order session - matches official HDFC NodejsBackendKit /session endpoint
+   */
   async createSession(params: {
     orderId: string;
     amount: number;
@@ -60,83 +78,217 @@ export class JuspayService {
     returnUrl: string;
     description?: string;
   }): Promise<JuspaySessionResponse> {
-    const body = {
+    const body: Record<string, any> = {
       order_id: params.orderId,
-      amount: params.amount.toFixed(2),
+      amount: params.amount,
       currency: 'INR',
+      return_url: params.returnUrl,
       customer_id: params.customerId,
       customer_email: params.customerEmail,
       customer_phone: params.customerPhone,
       payment_page_client_id: this.paymentPageClientId,
       action: 'paymentPage',
-      return_url: params.returnUrl,
-      description: params.description || 'Complete your payment',
+      description: params.description || 'KKDCA Payment',
       ...(params.firstName && { first_name: params.firstName }),
       ...(params.lastName && { last_name: params.lastName }),
     };
 
-    this.logger.log(`Creating Juspay session for order: ${params.orderId}`);
+    this.logger.log(`Creating HDFC session for order: ${params.orderId}`);
 
-    const response = await fetch(`${this.apiBaseUrl}/session`, {
+    const data = await this.makeServiceCall<JuspaySessionResponse>({
       method: 'POST',
-      headers: {
-        'Authorization': this.getAuthHeader(),
-        'Content-Type': 'application/json',
-        'x-merchantid': this.merchantId,
+      path: '/session',
+      body,
+      contentType: 'application/json',
+      extraHeaders: {
         'x-customerid': params.customerId,
-        'version': '2023-06-30',
       },
-      body: JSON.stringify(body),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      this.logger.error(`Juspay session creation failed: ${response.status} - ${errorText}`);
-      throw new Error(`Juspay session creation failed: ${response.status} - ${errorText}`);
-    }
-
-    const data = await response.json();
-    this.logger.log(`Juspay session created successfully for order: ${params.orderId}`);
+    this.logger.log(`HDFC session created for order: ${params.orderId}, payment_link: ${data.payment_links?.web ? 'yes' : 'no'}`);
     return data;
   }
 
+  /**
+   * Get order status - uses GET as per official HDFC NodejsBackendKit
+   */
   async getOrderStatus(orderId: string): Promise<JuspayOrderStatusResponse> {
     this.logger.log(`Fetching order status for: ${orderId}`);
 
-    const response = await fetch(
-      `${this.apiBaseUrl}/orders/${orderId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': this.getAuthHeader(),
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'x-merchantid': this.merchantId,
-        },
-        body: '',
-      },
-    );
+    const data = await this.makeServiceCall<JuspayOrderStatusResponse>({
+      method: 'GET',
+      path: `/orders/${orderId}`,
+    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      this.logger.error(`Juspay order status failed: ${response.status} - ${errorText}`);
-      throw new Error(`Juspay order status failed: ${response.status}`);
+    this.logger.log(`Order status for ${orderId}: ${data.status}`);
+    return data;
+  }
+
+  /**
+   * Initiate refund - matches official HDFC NodejsBackendKit POST /refunds
+   */
+  async refund(params: {
+    orderId: string;
+    amount: number;
+    uniqueRequestId?: string;
+  }): Promise<any> {
+    this.logger.log(`Initiating refund for order: ${params.orderId}, amount: ${params.amount}`);
+
+    return this.makeServiceCall({
+      method: 'POST',
+      path: '/refunds',
+      body: {
+        order_id: params.orderId,
+        amount: params.amount,
+        unique_request_id: params.uniqueRequestId || `refund_${Date.now()}`,
+      },
+      contentType: 'application/json',
+    });
+  }
+
+  /**
+   * Validate HMAC SHA256 signature from HDFC callback response
+   * Matches official HDFC NodejsBackendKit validateHMAC_SHA256
+   */
+  validateSignature(params: Record<string, any>): boolean {
+    if (!this.responseKey) {
+      this.logger.warn('HDFC_RESPONSE_KEY not configured, skipping signature validation');
+      return true;
     }
 
-    return response.json();
+    try {
+      const paramsList: Record<string, string> = {};
+      for (const key in params) {
+        if (key !== 'signature' && key !== 'signature_algorithm') {
+          paramsList[key] = params[key];
+        }
+      }
+
+      const sortedKeys = Object.keys(paramsList).sort();
+      const sortedParams: Record<string, string> = {};
+      for (const key of sortedKeys) {
+        sortedParams[key] = paramsList[key];
+      }
+
+      let paramsString = '';
+      for (const key in sortedParams) {
+        paramsString += `${key}=${sortedParams[key]}&`;
+      }
+      paramsString = paramsString.slice(0, -1); // remove trailing &
+
+      const encodedParams = encodeURIComponent(paramsString);
+      const computedHmac = crypto
+        .createHmac('sha256', this.responseKey)
+        .update(encodedParams)
+        .digest('base64');
+      const receivedHmac = decodeURIComponent(params.signature || '');
+
+      const isValid = decodeURIComponent(computedHmac) === receivedHmac;
+      if (!isValid) {
+        this.logger.error('HDFC signature validation failed');
+      }
+      return isValid;
+    } catch (error: any) {
+      this.logger.error(`Signature validation error: ${error.message}`);
+      return false;
+    }
   }
 
-  isPaymentSuccess(statusId: number): boolean {
-    // Juspay status_id 21 = CHARGED (success)
-    return statusId === 21;
+  isPaymentSuccess(statusOrId: string | number): boolean {
+    if (typeof statusOrId === 'string') {
+      return statusOrId === 'CHARGED';
+    }
+    return statusOrId === 21;
   }
 
-  isPaymentFailed(statusId: number): boolean {
-    // status_id 23 = AUTHENTICATION_FAILED, 26 = AUTHORIZATION_FAILED, 27 = JUSPAY_DECLINED
-    return [23, 26, 27, 28, 29, 30].includes(statusId);
+  isPaymentFailed(statusOrId: string | number): boolean {
+    if (typeof statusOrId === 'string') {
+      return ['AUTHORIZATION_FAILED', 'AUTHENTICATION_FAILED', 'JUSPAY_DECLINED'].includes(statusOrId);
+    }
+    return [23, 26, 27, 28, 29, 30].includes(statusOrId);
   }
 
-  isPaymentPending(statusId: number): boolean {
-    // status_id 10 = NEW, 20 = PENDING_VBV
-    return [10, 20].includes(statusId);
+  isPaymentPending(statusOrId: string | number): boolean {
+    if (typeof statusOrId === 'string') {
+      return ['PENDING', 'PENDING_VBV', 'NEW'].includes(statusOrId);
+    }
+    return [10, 20].includes(statusOrId);
+  }
+
+  /**
+   * Core HTTP call using fetch - force IPv4 to avoid Cloudflare blocking datacenter IPv6
+   */
+  private async makeServiceCall<T>(options: {
+    method: string;
+    path: string;
+    body?: Record<string, any>;
+    contentType?: string;
+    extraHeaders?: Record<string, string>;
+  }): Promise<T> {
+    // Force IPv4 DNS resolution to avoid Cloudflare blocking datacenter IPv6
+    dns.setDefaultResultOrder('ipv4first');
+
+    const fullUrl = new URL(options.path, this.apiBaseUrl);
+
+    const headers: Record<string, string> = {
+      'Content-Type': options.contentType || 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'version': '2024-06-24',
+      'x-merchantid': this.merchantId,
+      'Authorization': this.getAuthHeader(),
+      ...(options.extraHeaders || {}),
+    };
+
+    let bodyPayload: string | undefined;
+    if (options.body) {
+      if ((headers['Content-Type'] || '').includes('json')) {
+        bodyPayload = JSON.stringify(options.body);
+      } else {
+        bodyPayload = Object.keys(options.body)
+          .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(options.body![key])}`)
+          .join('&');
+      }
+    }
+
+    this.logger.log(`HDFC API: ${options.method} ${fullUrl.toString()}`);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 100000);
+
+    try {
+      const response = await fetch(fullUrl.toString(), {
+        method: options.method,
+        headers,
+        body: bodyPayload || (options.method === 'POST' ? '' : undefined),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+
+      const responseText = await response.text();
+      this.logger.log(`HDFC API response: ${response.status} - ${responseText.substring(0, 300)}`);
+
+      let resJson: any;
+      try {
+        resJson = JSON.parse(responseText);
+      } catch {
+        this.logger.error(`HDFC API invalid JSON (Cloudflare block?): ${responseText.substring(0, 500)}`);
+        throw new Error('Invalid response from HDFC gateway - possible Cloudflare block');
+      }
+
+      if (response.ok) {
+        return resJson as T;
+      } else {
+        const errorMsg = resJson.error_message || resJson.message || `HTTP ${response.status}`;
+        this.logger.error(`HDFC API error: ${response.status} - ${errorMsg}`);
+        throw new Error(`HDFC gateway error: ${errorMsg}`);
+      }
+    } catch (error: any) {
+      clearTimeout(timeout);
+      if (error.name === 'AbortError') {
+        throw new Error('HDFC API request timeout');
+      }
+      throw error;
+    }
   }
 }

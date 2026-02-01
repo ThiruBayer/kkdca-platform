@@ -48,7 +48,7 @@ export default function LoginPage() {
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
               <span className="text-primary-600 font-bold text-xl">K</span>
             </div>
-            <span className="text-white text-xl font-semibold">KDCA</span>
+            <span className="text-white text-xl font-semibold">KKDCA</span>
           </div>
         </div>
         <div>
@@ -61,7 +61,7 @@ export default function LoginPage() {
           </p>
         </div>
         <div className="text-primary-200 text-sm">
-          &copy; 2026 KDCA. All rights reserved.
+          &copy; 2026 KKDCA. All rights reserved.
         </div>
       </div>
 
@@ -72,7 +72,7 @@ export default function LoginPage() {
             <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-white font-bold text-2xl">K</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">KDCA Admin</h1>
+            <h1 className="text-2xl font-bold text-gray-900">KKDCA Admin</h1>
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>

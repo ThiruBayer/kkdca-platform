@@ -1,4 +1,7 @@
 {
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "name": "kdca-api",
   "version": "1.0.0",
   "description": "KDCA Platform Backend API",

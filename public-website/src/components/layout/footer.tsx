@@ -29,7 +29,7 @@ export function Footer() {
             </div>
             <p className="text-sm text-gray-400 mb-5 leading-relaxed">
               Kallakurichi District Chess Association - The official governing body for chess
-              activities in Kallakurichi District, affiliated with TNSCA &amp; AICF.
+              activities in Kallakurichi District, affiliated with TNSCA.
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
@@ -79,16 +79,6 @@ export function Footer() {
               <li>
                 <a href="https://www.tnsca.in" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-yellow-400 transition-colors">
                   <ExternalLink className="h-3.5 w-3.5" /> TNSCA
-                </a>
-              </li>
-              <li>
-                <a href="https://www.aicf.in" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-yellow-400 transition-colors">
-                  <ExternalLink className="h-3.5 w-3.5" /> AICF
-                </a>
-              </li>
-              <li>
-                <a href="https://www.fide.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-yellow-400 transition-colors">
-                  <ExternalLink className="h-3.5 w-3.5" /> FIDE
                 </a>
               </li>
             </ul>
