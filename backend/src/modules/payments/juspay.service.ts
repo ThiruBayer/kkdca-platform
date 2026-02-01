@@ -112,12 +112,15 @@ export class JuspayService {
   /**
    * Get order status - uses GET as per official HDFC NodejsBackendKit
    */
-  async getOrderStatus(orderId: string): Promise<JuspayOrderStatusResponse> {
+  async getOrderStatus(orderId: string, customerId?: string): Promise<JuspayOrderStatusResponse> {
     this.logger.log(`Fetching order status for: ${orderId}`);
 
     const data = await this.makeServiceCall<JuspayOrderStatusResponse>({
       method: 'GET',
       path: `/orders/${orderId}`,
+      extraHeaders: {
+        'x-customerid': customerId || orderId,
+      },
     });
 
     this.logger.log(`Order status for ${orderId}: ${data.status}`);
@@ -136,13 +139,15 @@ export class JuspayService {
 
     return this.makeServiceCall({
       method: 'POST',
-      path: '/refunds',
+      path: `/orders/${params.orderId}/refunds`,
       body: {
-        order_id: params.orderId,
-        amount: params.amount,
         unique_request_id: params.uniqueRequestId || `refund_${Date.now()}`,
+        amount: params.amount,
       },
       contentType: 'application/json',
+      extraHeaders: {
+        'x-customerid': params.orderId,
+      },
     });
   }
 
@@ -235,6 +240,7 @@ export class JuspayService {
       'Accept': 'application/json',
       'version': '2024-06-24',
       'x-merchantid': this.merchantId,
+      'x-resellerid': 'hdfc_reseller',
       'Authorization': this.getAuthHeader(),
       ...(options.extraHeaders || {}),
     };
