@@ -154,6 +154,42 @@ export class AdminController {
     return this.adminService.getPaymentReports(new Date(from), new Date(to));
   }
 
+  @Get('id-update-requests')
+  @ApiOperation({ summary: 'List ID update requests' })
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  async getIdUpdateRequests(
+    @Query('status') status?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.adminService.getIdUpdateRequests({
+      status,
+      page: page || 1,
+      limit: Math.min(limit || 20, 100),
+    });
+  }
+
+  @Post('id-update-requests/:id/approve')
+  @ApiOperation({ summary: 'Approve ID update request' })
+  async approveIdUpdateRequest(
+    @Param('id') requestId: string,
+    @CurrentUser('id') adminId: string,
+  ) {
+    return this.adminService.approveIdUpdateRequest(requestId, adminId);
+  }
+
+  @Post('id-update-requests/:id/reject')
+  @ApiOperation({ summary: 'Reject ID update request' })
+  async rejectIdUpdateRequest(
+    @Param('id') requestId: string,
+    @CurrentUser('id') adminId: string,
+    @Body('remarks') remarks: string,
+  ) {
+    return this.adminService.rejectIdUpdateRequest(requestId, adminId, remarks);
+  }
+
   @Get('audit-logs')
   @ApiOperation({ summary: 'Get audit logs' })
   @ApiQuery({ name: 'userId', required: false })
