@@ -61,7 +61,7 @@ export class JuspayService {
   }
 
   private getAuthHeader(): string {
-    return 'Basic ' + Buffer.from(this.apiKey).toString('base64');
+    return 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
   }
 
   /**
