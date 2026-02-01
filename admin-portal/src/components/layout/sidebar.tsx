@@ -14,7 +14,7 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
-  IdCard,
+  UserCog,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,7 +26,7 @@ const navigation = [
   { name: 'Players', href: '/players', icon: Users, roles: ADMIN_ROLES },
   { name: 'Tournaments', href: '/tournaments', icon: Trophy, roles: null },
   { name: 'Organizations', href: '/organizations', icon: Building2, roles: [...ADMIN_ROLES, 'ACADEMY', 'TALUK_ASSOCIATION'] },
-  { name: 'ID Updates', href: '/id-updates', icon: IdCard, roles: ADMIN_ROLES },
+  { name: 'ID Updates', href: '/id-updates', icon: UserCog, roles: ADMIN_ROLES },
   { name: 'Content', href: '/content', icon: FileText, roles: ADMIN_ROLES },
   { name: 'Payments', href: '/payments', icon: CreditCard, roles: ADMIN_ROLES },
   { name: 'Settings', href: '/settings', icon: Settings, roles: ADMIN_ROLES },
