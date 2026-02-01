@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -9,6 +9,18 @@ import { CheckCircle, XCircle, Clock, Loader2, Home } from 'lucide-react';
 type PaymentState = 'loading' | 'success' | 'failed' | 'pending' | 'error';
 
 export default function PaymentStatusPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+      </div>
+    }>
+      <PaymentStatusContent />
+    </Suspense>
+  );
+}
+
+function PaymentStatusContent() {
   const searchParams = useSearchParams();
   const [state, setState] = useState<PaymentState>('loading');
   const [payment, setPayment] = useState<any>(null);
