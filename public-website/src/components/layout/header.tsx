@@ -94,10 +94,10 @@ export function Header() {
           </Link>
 
           {/* Desktop navigation */}
-          <div className="hidden lg:flex lg:items-center lg:gap-1">
+          <div className="hidden lg:flex lg:items-center lg:gap-1" ref={dropdownRef}>
             {navigation.map((item) =>
               item.children ? (
-                <div key={item.name} className="relative" ref={dropdownRef}>
+                <div key={item.name} className="relative">
                   <button
                     onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
                     className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-all"
@@ -107,18 +107,30 @@ export function Header() {
                   </button>
                   {openDropdown === item.name && (
                     <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-                      {item.children.map((child) => (
-                        <a
-                          key={child.name}
-                          href={child.href}
-                          target={child.href.startsWith('http') || child.href.endsWith('.pdf') ? '_blank' : undefined}
-                          rel={child.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 transition-all"
-                          onClick={() => setOpenDropdown(null)}
-                        >
-                          {child.name}
-                        </a>
-                      ))}
+                      {item.children.map((child) => {
+                        const isExternal = child.href.startsWith('http') || child.href.endsWith('.pdf');
+                        return isExternal ? (
+                          <a
+                            key={child.name}
+                            href={child.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 transition-all"
+                            onClick={() => setOpenDropdown(null)}
+                          >
+                            {child.name}
+                          </a>
+                        ) : (
+                          <Link
+                            key={child.name}
+                            href={child.href}
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 transition-all"
+                            onClick={() => setOpenDropdown(null)}
+                          >
+                            {child.name}
+                          </Link>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
